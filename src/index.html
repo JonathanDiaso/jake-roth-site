@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jake Roth — RamseyTrusted Real Estate, Colorado Springs</title>
+<meta name="description" content="Jake Roth — RamseyTrusted Certified ELP and Pink Realty agent in Colorado Springs. 136 homes closed, $48.9M sold. Run your own numbers on Ramsey's 25% rule before you talk to anyone.">
+<meta name="theme-color" content="#0A090C">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap">
+
+<!-- Hero is the LCP element. Preloading it starts the fetch during head
+     parse instead of waiting for layout to reach the <picture>. -->
+<link rel="preload" as="image" type="image/webp" fetchpriority="high"
+      imagesrcset="assets/hero-900.webp 900w, assets/hero-1280.webp 1280w, assets/hero-1800.webp 1800w, assets/hero-2400.webp 2400w"
+      imagesizes="100vw" media="(min-width: 48rem)">
+<link rel="preload" as="image" type="image/webp" fetchpriority="high"
+      imagesrcset="assets/hero-portrait-560.webp 560w, assets/hero-portrait-750.webp 750w, assets/hero-portrait-1000.webp 1000w"
+      imagesizes="100vw" media="(max-width: 47.999rem)">
+
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/sections.css">
+<link rel="stylesheet" href="styles/engine.css">
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+
+<main id="main">
+
+  <!-- ========== HERO ========== -->
+  <header class="hero">
+    <!-- Landscape frame keeps the full sky. Phones get a 3:4 crop that
+         holds both the summit and the jets — a centre-crop of the wide
+         frame would lose one or the other. -->
+    <picture class="hero__media">
+      <source media="(max-width: 47.999rem)" type="image/webp"
+              srcset="assets/hero-portrait-560.webp 560w, assets/hero-portrait-750.webp 750w, assets/hero-portrait-1000.webp 1000w"
+              sizes="100vw">
+      <source media="(max-width: 47.999rem)"
+              srcset="assets/hero-portrait-560.jpg 560w, assets/hero-portrait-750.jpg 750w, assets/hero-portrait-1000.jpg 1000w"
+              sizes="100vw">
+      <source type="image/webp"
+              srcset="assets/hero-900.webp 900w, assets/hero-1280.webp 1280w, assets/hero-1800.webp 1800w, assets/hero-2400.webp 2400w"
+              sizes="100vw">
+      <img src="assets/hero-1280.jpg"
+           srcset="assets/hero-900.jpg 900w, assets/hero-1280.jpg 1280w, assets/hero-1800.jpg 1800w, assets/hero-2400.jpg 2400w"
+           sizes="100vw"
+           alt="Four Air Force Thunderbirds flying in tight formation above a snow-covered Pikes Peak, seen across the foothills from Colorado Springs."
+           fetchpriority="high" decoding="async" width="3896" height="2173">
+    </picture>
+
+    <div class="hero__scrim" aria-hidden="true"></div>
+
+    <!-- The visitor arrived from Ramsey. Approval is the first thing on
+         screen, before they scroll and before they read anything else. -->
+    <div class="arrival">
+      <div class="container container--wide arrival__inner">
+        <img class="arrival__shield" src="assets/ramsey-shield-200.webp"
+             alt="RamseyTrusted five-star shield" width="614" height="432"
+             fetchpriority="high" decoding="async">
+        <p class="arrival__text">
+          <strong>Dave&rsquo;s Trusted Network of Top Pros</strong>
+          <span>Endorsed Local Provider &middot; Colorado Springs</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="container container--wide hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow hero__eyebrow">Colorado Springs · Pink Realty</p>
+
+        <h1 class="display hero__name" data-name-reveal>Jake Roth</h1>
+        <hr class="hero__rule">
+
+        <p class="hero__line">
+          Real estate, handled the disciplined way.
+        </p>
+        <p class="hero__sub">
+          Born and raised in Colorado Springs. Nine years, 136 closings,
+          $48.9M sold &mdash; and the same plan Ramsey teaches, run on my own money first.
+        </p>
+      </div>
+
+      <nav class="doors" aria-label="Choose your path">
+        <a class="door glass glass--lit" href="#paths" data-press data-magnetic="0.06">
+          <span>
+            <span class="door__label">I'm Buying</span>
+            <span class="door__sub">Find the right home at the right number</span>
+          </span>
+          <span class="door__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a class="door glass glass--lit" href="#paths" data-press data-magnetic="0.06">
+          <span>
+            <span class="door__label">I'm Selling</span>
+            <span class="door__sub">Price it right, market it properly, net more</span>
+          </span>
+          <span class="door__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </nav>
+    </div>
+
+    <p class="hero__scroll" aria-hidden="true">
+      <span>Scroll</span><span class="hero__scroll-track"></span>
+    </p>
+  </header>
+
+  <span data-rail-sentinel aria-hidden="true"></span>
+
+  <!-- ========== CREDENTIALS BAND · 04_COMPLIANCE.md §1 ========== -->
+  <section class="credentials" aria-labelledby="cred-title">
+    <div class="container container--wide">
+      <div class="credentials__grid">
+        <div class="credentials__copy">
+          <p class="eyebrow">Credentials</p>
+          <h2 class="credentials__statement" id="cred-title" data-reveal>
+            Ramsey does not hand this out. You have to keep earning it.
+          </h2>
+          <p class="body-text" data-reveal data-reveal-stagger="80">
+            Endorsed Local Providers are vetted on service, held to Ramsey&rsquo;s standards,
+            and reviewed on what clients actually say afterward. That is the filter you
+            just came through. Behind it is a Colorado Springs brokerage, a nine-year
+            local record, and one person accountable for the result.
+          </p>
+        </div>
+
+        <div class="marks" data-reveal data-reveal-stagger="140">
+          <!-- Official Ramsey asset. Square aspect preserved exactly; never
+               resized out of ratio, cropped, rearranged, or recoloured.
+               04_COMPLIANCE.md §1 -->
+          <figure class="ramsey-plate">
+            <picture>
+              <source type="image/webp"
+                      srcset="assets/ramsey-network-380.webp 380w, assets/ramsey-network-560.webp 560w, assets/ramsey-network-800.webp 800w"
+                      sizes="(min-width: 60rem) 20rem, (min-width: 40rem) 17rem, 14rem">
+              <img src="assets/ramsey-network-560.jpg"
+                   srcset="assets/ramsey-network-380.jpg 380w, assets/ramsey-network-560.jpg 560w, assets/ramsey-network-800.jpg 800w"
+                   sizes="(min-width: 60rem) 20rem, (min-width: 40rem) 17rem, 14rem"
+                   alt="Dave's Trusted Network of Top Pros — Endorsed Local Providers"
+                   width="1000" height="1000" loading="lazy" decoding="async">
+            </picture>
+          </figure>
+
+          <div class="marks__brand">
+            <img class="marks__shield" src="assets/ramsey-shield-300.webp"
+                 srcset="assets/ramsey-shield-200.webp 200w, assets/ramsey-shield-300.webp 300w, assets/ramsey-shield-440.webp 440w"
+                 sizes="9rem"
+                 alt="RamseyTrusted five-star shield" width="614" height="432"
+                 loading="lazy" decoding="async">
+            <p class="marks__claim" data-ramsey-claim>RamseyTrusted Certified ELP</p>
+            <img class="marks__logo" src="assets/logo-480.png"
+                 srcset="assets/logo-480.png 480w, assets/logo-720.png 720w"
+                 sizes="(min-width: 48rem) 16rem, 13rem"
+                 alt="Jake from Pink Realty" width="1375" height="305"
+                 loading="lazy" decoding="async">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROOF ========== -->
+  <section class="section section--tight" aria-labelledby="proof-title">
+    <div class="container container--wide">
+      <h2 class="visually-hidden" id="proof-title">Track record</h2>
+      <div class="proof__grid" data-proof></div>
+    </div>
+  </section>
+
+  <!-- ========== THE FORK ========== -->
+  <section class="section" id="paths" aria-labelledby="paths-title">
+    <div class="container container--wide">
+      <div class="section-head">
+        <p class="eyebrow">Two journeys</p>
+        <h2 class="display display--lg" id="paths-title" data-reveal>
+          Tell me which side of the table you're on.
+        </h2>
+        <p class="body-text" data-reveal data-reveal-stagger="80">
+          Buying and selling are different problems. So the advice is different, and the
+          plan is different. Pick yours.
+        </p>
+      </div>
+
+      <div class="fork__switch" role="tablist" aria-label="Buying or selling">
+        <button class="fork__tab" role="tab" data-press id="tab-buying"
+                aria-controls="panel-buying" aria-selected="true">Buying</button>
+        <button class="fork__tab" role="tab" data-press id="tab-selling"
+                aria-controls="panel-selling" aria-selected="false">Selling</button>
+      </div>
+
+      <div class="fork__panel" role="tabpanel" id="panel-buying" aria-labelledby="tab-buying" tabindex="0">
+        <div class="tracks" data-tracks="buying"></div>
+      </div>
+
+      <div class="fork__panel" role="tabpanel" id="panel-selling" aria-labelledby="tab-selling" tabindex="0" hidden>
+        <div class="tracks" data-tracks="selling"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ★ THE SHOWPIECE ========== -->
+  <section class="section engine" id="engine" data-engine aria-labelledby="engine-title">
+    <div class="container container--wide engine__inner">
+
+      <div class="section-head">
+        <p class="eyebrow">Run it yourself</p>
+        <h2 class="display display--lg" id="engine-title" data-reveal>
+          What can you actually afford —<br><em>and where does that reach?</em>
+        </h2>
+        <p class="body-text" data-reveal data-reveal-stagger="80">
+          Built on the rule I'd hold you to anyway: a payment at or under 25% of your
+          monthly take-home, on a 15-year fixed. No email required to see the answer.
+        </p>
+      </div>
+
+      <div class="engine__grid">
+
+        <!-- CONTROLS -->
+        <div class="controls glass" data-reveal>
+          <div class="field">
+            <label class="field__label" for="take-home">Monthly take-home pay</label>
+            <p class="field__readout">
+              <span class="field__currency">$</span>
+              <span class="field__amount numeric" data-out="take-home">6,200</span>
+              <span class="field__per">/ month</span>
+            </p>
+            <input class="range" type="range" id="take-home"
+                   min="2500" max="20000" step="100" value="6200"
+                   aria-describedby="take-home-help">
+            <p class="meta" id="take-home-help">What actually lands in your account after taxes.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="down-payment">Down payment saved</label>
+            <p class="field__readout">
+              <span class="field__currency">$</span>
+              <span class="field__amount numeric" data-out="down">40,000</span>
+            </p>
+            <input class="range" type="range" id="down-payment"
+                   min="0" max="200000" step="2500" value="40000">
+          </div>
+
+          <fieldset class="term" style="border:0;padding:0;margin:0">
+            <legend class="field__label" style="padding:0">Loan term</legend>
+            <div class="term__options">
+              <label class="term__option" data-press>
+                <input type="radio" name="term" value="15" checked>
+                <span class="term__name">15-year fixed</span>
+                <span class="term__note">The Ramsey rule</span>
+              </label>
+              <label class="term__option" data-press>
+                <input type="radio" name="term" value="30">
+                <span class="term__name">30-year fixed</span>
+                <span class="term__note">Conventional</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- RESULT -->
+        <div class="result">
+          <div class="result__headline glass" data-reveal data-reveal-stagger="80">
+            <p class="result__caption">At 25% of take-home, you can buy up to</p>
+            <output class="result__price numeric" data-out="price" for="take-home down-payment">$0</output>
+            <p class="result__payment">
+              <strong class="numeric" data-out="payment">$0</strong> per month, all in —
+              that's <span class="numeric" data-out="share">25%</span> of your take-home.
+            </p>
+          </div>
+
+          <div class="breakdown">
+            <div class="breakdown__row">
+              <span class="breakdown__label">Principal &amp; interest</span>
+              <span class="breakdown__value" data-out="pi">$0</span>
+            </div>
+            <div class="breakdown__row">
+              <span class="breakdown__label">Property taxes (est.)</span>
+              <span class="breakdown__value" data-out="tax">$0</span>
+            </div>
+            <div class="breakdown__row">
+              <span class="breakdown__label">Homeowners insurance (est.)</span>
+              <span class="breakdown__value" data-out="ins">$0</span>
+            </div>
+            <div class="breakdown__row">
+              <span class="breakdown__label">Total monthly payment</span>
+              <span class="breakdown__value" data-out="total">$0</span>
+            </div>
+          </div>
+
+          <p class="compare" data-out="compare"></p>
+
+          <details class="assumptions">
+            <summary>What this calculation assumes</summary>
+            <div class="assumptions__body">
+              <p>Payment capped at 25% of monthly take-home pay, per the Ramsey rule.</p>
+              <p>Property taxes and homeowners insurance are estimated as a share of home
+                 value and scale with price. Colorado Springs insurance runs above the
+                 national average because of hail exposure.</p>
+              <p>Rates shown are assumptions, not quotes. Assumptions last reviewed:
+                 <span data-assumptions-date>—</span>.</p>
+              <p>No HOA dues, PMI, or mortgage insurance are included. Many Colorado
+                 Springs communities carry HOA dues, which reduce what you can afford.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- ATLAS · the payoff -->
+      <div class="atlas">
+        <div class="atlas__head">
+          <div>
+            <p class="eyebrow">Where that number reaches</p>
+          </div>
+          <p class="atlas__count" data-out="atlas-count" role="status" aria-live="polite"></p>
+        </div>
+        <div class="atlas__grid" data-atlas></div>
+      </div>
+
+      <!-- THE ASK · inherits what they just did -->
+      <div class="engine__ask glass" data-reveal>
+        <p class="engine__ask-title" data-out="ask">Jake, is this the right number for me?</p>
+        <p class="engine__ask-note">
+          Send that exact question, with your numbers already attached. No form, no funnel.
+        </p>
+        <a class="btn btn--primary btn--lg" href="#" data-out="ask-link" data-press data-magnetic="0.14">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Text me this question
+        </a>
+      </div>
+
+      <p class="disclaimer">
+        These are estimates for planning, not a lending decision, a pre-approval, or a
+        mortgage quote. Actual figures depend on your credit, the property, current rates,
+        and your lender's underwriting.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== STORY ========== -->
+  <section class="section" id="about" aria-labelledby="story-title">
+    <div class="container container--wide">
+      <div class="story__grid">
+        <div class="portrait" data-portrait data-parallax="6">
+          <div class="portrait__empty">
+            <p class="meta">Environmental portrait<br>4:5 — replace in content.js</p>
+          </div>
+        </div>
+        <div class="story__copy">
+          <p class="eyebrow">Who you are actually calling</p>
+          <h2 class="display display--lg" id="story-title" data-reveal>
+            Straight answers, and the math to back them.
+          </h2>
+          <div data-story-body data-reveal data-reveal-stagger="80"></div>
+          <p class="signature">Jake</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VOICES · removes itself when empty ========== -->
+  <section class="section section--tight" data-voices-section aria-labelledby="voices-title">
+    <div class="container container--wide section-head">
+      <p class="eyebrow">In their words</p>
+      <h2 class="display display--md" id="voices-title">Twelve five-star reviews. Their words, not mine.</h2>
+    </div>
+    <div class="marquee">
+      <div class="marquee__track" data-voices></div>
+    </div>
+  </section>
+
+  <!-- ========== CLOSE ========== -->
+  <section class="section close" id="contact" aria-labelledby="close-title">
+    <div class="container close__inner">
+      <h2 class="display display--xl close__title" id="close-title" data-reveal>
+        Ask me the question you actually have.
+      </h2>
+      <p class="lede close__lede" style="max-width:44ch" data-reveal data-reveal-stagger="80">
+        Not a form that disappears into a system. A conversation with the person whose
+        name is on this page.
+      </p>
+
+      <div class="contact-doors">
+        <a class="contact-door glass glass--lit" data-tel href="#" data-press data-reveal>
+          <svg class="contact-door__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+          <span class="contact-door__label">Call</span>
+          <span class="contact-door__value" data-phone-display>(719) 000-0000</span>
+        </a>
+        <a class="contact-door glass glass--lit" data-sms href="#" data-press data-reveal data-reveal-stagger="70">
+          <svg class="contact-door__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="contact-door__label">Text</span>
+          <span class="contact-door__value">Fastest reply</span>
+        </a>
+        <a class="contact-door glass glass--lit" data-book href="#" data-press data-reveal data-reveal-stagger="140">
+          <svg class="contact-door__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+          <span class="contact-door__label">Book 15 min</span>
+          <span class="contact-door__value">Pick a time</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ========== FOOTER · 04_COMPLIANCE.md §5 ==========
+     The page opens on a real mountain and closes on a drawn one. -->
+<footer class="footer">
+  <canvas class="footer__terrain" data-terrain aria-hidden="true"></canvas>
+  <div class="footer__fade" aria-hidden="true"></div>
+
+  <div class="container container--wide footer__grid">
+    <div class="footer__legal">
+      <img class="footer__logo" src="assets/logo-480.png"
+           srcset="assets/logo-480.png 480w, assets/logo-720.png 720w"
+           sizes="(min-width: 48rem) 17rem, 14rem"
+           alt="Jake from Pink Realty" width="1375" height="305" loading="lazy" decoding="async">
+      <p class="meta"><span data-agent-name>Jake Roth</span>, REALTOR® — Colorado License #<span data-license>—</span></p>
+      <p class="meta">Pink Realty — <span data-brokerage-address>—</span>, Colorado Springs, CO</p>
+      <p class="meta"><span data-ramsey-claim>RamseyTrusted Agent</span></p>
+      <p class="meta">© <span data-year>2026</span> <span data-agent-name>Jake</span>. All rights reserved.</p>
+    </div>
+
+    <div>
+      <div class="footer__marks">
+        <img class="footer__shield" src="assets/ramsey-shield-200.webp"
+             alt="RamseyTrusted five-star shield" width="614" height="432"
+             loading="lazy" decoding="async">
+        <span class="mark-slot">Equal Housing<br>Opportunity</span>
+        <span class="mark-slot">REALTOR®</span>
+      </div>
+      <nav class="footer__links" aria-label="Legal" style="margin-top:var(--space-8)">
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms of Use</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky rail · mobile only, appears past the hero -->
+<div class="rail" data-rail>
+  <a class="btn btn--ghost" data-tel data-press href="#">Call</a>
+  <a class="btn btn--primary" data-sms data-press href="#">Text</a>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
