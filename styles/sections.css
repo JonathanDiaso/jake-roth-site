@@ -1,0 +1,746 @@
+/* ============================================================
+   SECTIONS  ·  hero, credentials, proof, fork, story, voices, close
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   HERO
+   ------------------------------------------------------------ */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Copy rides in the sky, doors sit on the darkened foothills. The gap
+   between them is the photograph doing its job. */
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding-block: clamp(6rem, 16vh, 10rem) var(--space-16);
+}
+
+/* The photograph. object-position keeps the summit and the jets in
+   frame as the viewport ratio changes. */
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-terrain);
+  display: block;
+  /* Inline 24px placeholder, ~0.9KB, blurred up to full bleed. It paints
+     in the first frame so the hero is never an empty dark rectangle
+     while the full image decodes. The real photo lands on top of it. */
+  background-image: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABMNDhEODBMRDxEVFBMXHTAfHRoaHToqLCMwRT1JR0Q9Q0FMVm1dTFFoUkFDX4JgaHF1e3x7SlyGkIV3j214e3b/2wBDARQVFR0ZHTgfHzh2T0NPdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnb/wAARCAANABgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCz5Z9KPKPpVWO4Z1J59OpqL7ZIWYZ4VsDk1u8VG9jl9iy/5R9KKqeY7biSPxFFJYqLH7E//9k=");
+  background-size: cover;
+  background-position: 52% 42%;
+}
+@media (max-width: 47.999rem) {
+  .hero__media { background-image: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABMNDhEODBMRDxEVFBMXHTAfHRoaHToqLCMwRT1JR0Q9Q0FMVm1dTFFoUkFDX4JgaHF1e3x7SlyGkIV3j214e3b/2wBDARQVFR0ZHTgfHzh2T0NPdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnb/wAARCAAYABIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCbbRtqwsJZsDr70hhKnBBBr0OZHBysg20VZ+zueQp/KijmQcrM2WaKJNzqfzppuQQCUPPTLUUV5UasmtTt5USC4OBhRj/eNFFFL2kh2P/Z"); }
+}
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 52% 42%;
+  /* Cross-fade from the placeholder rather than a hard swap. */
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out-expo);
+}
+.hero__media img.is-loaded { opacity: 1; }
+/* No JS: never leave the real photo hidden. */
+html:not(.js-on) .hero__media img { opacity: 1; }
+
+/* NOTE: an earlier build laid a soft-light pink gradient over the photo
+   as a "restrained duotone". Tested side by side it flattened the frame
+   and buried the summit entirely. The colour bridge is delivered instead
+   by the pink radial inside the scrim below, which reads as light in the
+   sky rather than a filter on the photograph. Fewer layers, better result.
+   ------------------------------------------------------------ */
+
+/* Legibility scrim. Sits above the grade so the copy always has a
+   guaranteed dark ground regardless of what the photograph is doing.
+   Verified: white on the darkened sky clears 4.5:1. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-bloom) + 1);
+  pointer-events: none;
+  background:
+    /* 1 — copy pocket. Deep enough for the eyebrow and sub-line, small
+       enough that it never reaches the summit or the formation. */
+    radial-gradient(44rem 40rem at 4% 40%, rgba(10, 9, 12, 0.62), rgba(10, 9, 12, 0.24) 52%, transparent 76%),
+    /* 2 — pink light near the jets, from the rock bridge */
+    radial-gradient(34rem 22rem at 58% 40%, var(--color-brand-pink-wash), transparent 68%),
+    /* 3 — vertical: hold the top, open the middle for the peak, then
+       close hard into the page ground so there is no seam. */
+    linear-gradient(to bottom,
+      rgba(10, 9, 12, 0.52) 0%,
+      rgba(10, 9, 12, 0.16) 22%,
+      rgba(10, 9, 12, 0.06) 44%,
+      rgba(10, 9, 12, 0.46) 70%,
+      rgba(10, 9, 12, 0.94) 90%,
+      var(--color-surface-base) 100%),
+    /* 4 — uniform cinematic base. A flat darkening preserves the
+       photograph's tonal relationships far better than a brightness
+       filter, which flattens the snow and muddies the shadows. */
+    rgba(10, 9, 12, 0.42);
+}
+
+/* Pull saturation back so the sky stops fighting a warm near-black
+   palette; add a little contrast so the summit keeps its separation. */
+.hero__media img { filter: saturate(0.72) contrast(1.08); }
+
+.hero__inner {
+  position: relative;
+  z-index: var(--z-content);
+  width: 100%;
+}
+
+.hero__copy { max-width: 46rem; }
+
+.hero__eyebrow { margin-bottom: var(--space-8); }
+
+.hero__name {
+  font-size: var(--text-7xl);
+  margin-bottom: var(--space-6);
+  /* The name sits over sky. A long soft shadow costs nothing and
+     guarantees the descenders stay readable over the brightest cloud. */
+  text-shadow: 0 2px 40px rgba(10, 9, 12, 0.55);
+}
+
+.hero__sub {
+  margin-top: var(--space-4);
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  color: var(--color-ink-700);
+  max-width: 32ch;
+  text-wrap: pretty;
+  /* This line lands on the ridge at wide viewports, where the scrim is
+     deliberately thin so the summit stays visible. The shadow carries
+     the contrast locally instead of darkening the whole mountain. */
+  text-shadow: 0 1px 18px rgba(10, 9, 12, 0.95), 0 0 6px rgba(10, 9, 12, 0.8);
+}
+
+/* The rule under the name is the first place pink appears. It earns
+   it by marking the single most important element on the screen. */
+.hero__rule {
+  width: min(100%, 22rem);
+  height: 2px;
+  border: 0;
+  margin: 0 0 var(--space-8);
+  background: linear-gradient(to right, var(--color-brand-pink), transparent);
+  transform-origin: left;
+}
+
+.hero__line {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  color: var(--color-ink-700);
+  max-width: 30ch;
+  margin-bottom: 0;
+  text-wrap: balance;
+}
+
+/* The two doors. Not navigation — a decision. */
+.doors {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 44rem;
+}
+@media (min-width: 40rem) { .doors { grid-template-columns: 1fr 1fr; } }
+
+.door {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 5.5rem;
+  padding: var(--space-6);
+  text-decoration: none;
+  color: var(--color-ink-900);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+.door:hover { transform: translateY(-3px); border-color: var(--color-line-strong); }
+
+.door__label {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+}
+.door__sub {
+  display: block;
+  margin-top: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-ink-300);
+  letter-spacing: var(--tracking-normal);
+}
+.door__arrow {
+  flex: none;
+  width: 2.75rem; height: 2.75rem;
+  display: grid; place-items: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-line-subtle);
+  color: var(--color-brand-pink-glow);
+  transition: transform var(--duration-base) var(--ease-out-expo),
+              background-color var(--duration-base) var(--ease-out-expo);
+}
+.door:hover .door__arrow {
+  transform: translateX(4px);
+  background: var(--color-brand-pink-wash);
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: var(--space-6);
+  right: var(--gutter);
+  z-index: var(--z-content);
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+}
+@media (min-width: 64rem) { .hero__scroll { display: flex; } }
+
+.hero__scroll-track {
+  width: 1px; height: 3.5rem;
+  background: var(--color-line-strong);
+  position: relative;
+  overflow: hidden;
+}
+.hero__scroll-track::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  height: 40%;
+  background: var(--color-brand-pink);
+  animation: scroll-hint 2.4s var(--ease-in-out-quart) infinite;
+}
+@keyframes scroll-hint {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(250%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll-track::after { animation: none; transform: none; }
+}
+
+/* ------------------------------------------------------------
+   CREDENTIALS BAND  ·  04_COMPLIANCE.md §1
+   A designed room for an unmodifiable navy badge.
+   ------------------------------------------------------------ */
+
+.credentials {
+  position: relative;
+  background:
+    radial-gradient(60rem 30rem at 50% 0%, var(--color-ramsey-navy-lift), transparent 70%),
+    var(--color-ramsey-navy);
+  border-block: 1px solid rgba(255, 255, 255, 0.09);
+  padding-block: var(--section-gap-md);
+  z-index: var(--z-content);
+}
+
+.credentials__grid {
+  display: grid;
+  gap: var(--space-12);
+  align-items: center;
+}
+@media (min-width: 60rem) {
+  .credentials__grid { grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-24); }
+}
+
+.credentials__copy > * + * { margin-top: var(--space-6); }
+.credentials__statement {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink-900);
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.marks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+/* The badge slot is sized to the official asset's native aspect and
+   never scales it. Real asset drops in here; nothing else changes. */
+.badge-slot {
+  flex: none;
+  width: 13.75rem;
+  aspect-ratio: 220 / 92;
+  display: grid;
+  place-items: center;
+  padding: var(--space-3);
+  border: 1px dashed rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+.badge-slot__note {
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+.badge-slot img { width: 100%; height: auto; }
+
+.marks__brand { display: grid; gap: var(--space-3); }
+.marks__logo { width: clamp(12rem, 26vw, 18rem); height: auto; }
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-900);
+  line-height: 1;
+}
+.wordmark span { color: var(--color-brand-pink-glow); }
+
+.credentials .meta { color: rgba(255, 255, 255, 0.66); }
+
+/* ------------------------------------------------------------
+   PROOF  ·  numeric counters, 02_MOTION.md §6
+   ------------------------------------------------------------ */
+
+.proof__grid {
+  display: grid;
+  gap: var(--space-8);
+  /* auto-fit, not a fixed 4-up: stats hide themselves when Jake has no
+     real number, and a half-empty fixed grid looks like a bug. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+.stat { padding-top: var(--space-6); border-top: 1px solid var(--color-line-subtle); }
+.stat__value {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  line-height: var(--leading-none);
+  color: var(--color-ink-900);
+  letter-spacing: var(--tracking-tighter);
+}
+.stat__label {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-ink-300);
+  line-height: var(--leading-snug);
+}
+
+/* ------------------------------------------------------------
+   THE FORK  ·  buying / selling, in-page state switch
+   The two financing philosophies never share a screen.
+   ------------------------------------------------------------ */
+
+.fork__switch {
+  display: inline-flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-line-subtle);
+  margin-bottom: var(--section-gap-sm);
+}
+
+.fork__tab {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-8);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-ink-500);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out-expo),
+              color var(--duration-fast) var(--ease-out-expo);
+}
+.fork__tab[aria-selected='true'] {
+  background: var(--color-brand-pink);
+  color: var(--color-ink-900);
+}
+.fork__tab:hover:not([aria-selected='true']) { color: var(--color-ink-900); }
+
+.fork__panel[hidden] { display: none; }
+.fork__panel { animation: panel-in var(--duration-slow) var(--ease-out-expo); }
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fork__panel { animation: none; }
+}
+
+.tracks {
+  display: grid;
+  gap: var(--space-6);
+}
+@media (min-width: 56rem) { .tracks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.track { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-4); }
+.track__icon { width: 2rem; height: 2rem; color: var(--color-brand-pink-glow); }
+.track__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  color: var(--color-ink-900);
+}
+.track__body { font-size: var(--text-base); color: var(--color-ink-500); line-height: var(--leading-relaxed); }
+.track__list { display: grid; gap: var(--space-2); margin-top: auto; padding-top: var(--space-4); }
+.track__list li {
+  display: flex; gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-ink-300);
+  line-height: var(--leading-snug);
+}
+.track__list li::before { content: '—'; color: var(--color-brand-pink); flex: none; }
+
+/* ------------------------------------------------------------
+   STORY  ·  the human moment
+   ------------------------------------------------------------ */
+
+.story__grid { display: grid; gap: var(--section-gap-sm); align-items: center; }
+@media (min-width: 60rem) {
+  .story__grid { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr); gap: var(--space-24); }
+}
+
+/* Photography feathers into the ground instead of sitting in a box.
+   No hard rectangle = the single biggest cheap-site tell, removed. */
+.portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-surface-raised);
+}
+.portrait img { width: 100%; height: 100%; object-fit: cover; }
+.portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--color-surface-base) 2%, transparent 42%),
+              linear-gradient(to right, var(--color-surface-base) -6%, transparent 26%);
+  pointer-events: none;
+}
+
+.portrait__empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-8);
+  text-align: center;
+  border: 1px dashed var(--color-line-strong);
+  border-radius: inherit;
+}
+
+.story__copy > * + * { margin-top: var(--space-6); }
+.story__copy [data-story-body] > * + * { margin-top: var(--space-4); }
+.signature {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-brand-pink-glow);
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------
+   VOICES  ·  marquee, 02_MOTION.md §7 (max one per page)
+   ------------------------------------------------------------ */
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track {
+  display: flex;
+  gap: var(--space-6);
+  width: max-content;
+  animation: drift 64s var(--ease-linear) infinite;
+}
+.marquee:hover .marquee__track,
+.marquee:focus-within .marquee__track { animation-play-state: paused; }
+@keyframes drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; }
+  .marquee { mask-image: none; -webkit-mask-image: none; overflow-x: auto; }
+}
+
+.quote {
+  width: min(24rem, 78vw);
+  gap: var(--space-4);
+  flex: none;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.stars { line-height: 0; }
+.stars svg {
+  width: 4.75rem;
+  height: auto;
+  fill: var(--color-accent-warm);
+}
+
+.quote__text {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  color: var(--color-ink-700);
+}
+.quote__who { font-size: var(--text-sm); color: var(--color-ink-300); margin-top: auto; }
+
+/* ------------------------------------------------------------
+   CLOSE  ·  three doors: call, text, book
+   ------------------------------------------------------------ */
+
+.close { position: relative; text-align: center; overflow: hidden; }
+.close::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(46rem 24rem at 50% 100%, var(--color-brand-pink-wash), transparent 68%);
+  pointer-events: none;
+}
+.close__inner { position: relative; }
+.close__title { margin-bottom: var(--space-6); text-wrap: balance; }
+.close__lede { margin-inline: auto; max-width: 44ch; margin-bottom: var(--space-12); }
+
+.contact-doors {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 52rem;
+  margin-inline: auto;
+}
+@media (min-width: 48rem) { .contact-doors { grid-template-columns: repeat(3, 1fr); } }
+
+.contact-door {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+  text-decoration: none;
+  color: var(--color-ink-900);
+  min-height: 44px;
+}
+.contact-door:hover { transform: translateY(-3px); }
+.contact-door__icon { width: 1.75rem; height: 1.75rem; color: var(--color-brand-pink-glow); }
+.contact-door__label { font-size: var(--text-lg); font-weight: var(--weight-medium); }
+.contact-door__value { font-size: var(--text-sm); color: var(--color-ink-300); }
+
+/* ------------------------------------------------------------
+   FOOTER  ·  04_COMPLIANCE.md §5 — legally required block
+   ------------------------------------------------------------ */
+
+.footer {
+  position: relative;
+  z-index: var(--z-content);
+  background: var(--color-surface-sunken);
+  border-top: 1px solid var(--color-line-subtle);
+  padding-block: calc(var(--section-gap-lg) + 3rem) var(--space-12);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* The drawn range. Fills the footer and drifts behind the legal block —
+   the bookend to the photographed range in the hero. */
+.footer__terrain {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+}
+.footer__fade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    /* Pockets behind each text block. The legal footer is a Rule 6.10
+       requirement — it outranks the artwork, so the ridges get pushed
+       back exactly where the type sits and nowhere else. */
+    radial-gradient(34rem 20rem at 16% 84%, rgba(5, 4, 6, 0.90), transparent 72%),
+    radial-gradient(30rem 16rem at 70% 82%, rgba(5, 4, 6, 0.82), transparent 74%),
+    radial-gradient(46rem 22rem at 50% 100%, var(--color-brand-pink-wash), transparent 68%),
+    linear-gradient(to bottom, var(--color-surface-sunken) 0%, transparent 30%, transparent 58%, rgba(5, 4, 6, 0.55) 88%, rgba(5, 4, 6, 0.8) 100%);
+}
+
+.footer__logo { width: clamp(13rem, 22vw, 17rem); height: auto; margin-bottom: var(--space-6); }
+
+.footer__grid { position: relative; display: grid; gap: var(--space-12); }
+@media (min-width: 56rem) { .footer__grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
+
+.footer__legal > * + * { margin-top: var(--space-3); }
+.footer__legal .meta { color: var(--color-ink-500); text-shadow: 0 1px 10px rgba(5,4,6,0.95); }
+.footer__marks { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6); }
+
+.mark-slot {
+  background: rgba(5, 4, 6, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  padding: var(--space-2) var(--space-3);
+  min-height: 2.75rem;
+  border: 1px dashed var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+  text-align: center;
+}
+
+.footer__links { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+.footer__links a {
+  color: var(--color-ink-500);
+  text-shadow: 0 1px 10px rgba(5, 4, 6, 0.95);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+}
+.footer__links a:hover { color: var(--color-ink-900); border-bottom-color: var(--color-brand-pink); }
+
+/* ------------------------------------------------------------
+   STICKY CONTACT RAIL  ·  mobile-first tap-to-call
+   65% of traffic is a phone. The phone number is the CTA.
+   ------------------------------------------------------------ */
+
+.rail {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: var(--z-rail);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: rgba(10, 9, 12, 0.86);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--color-line-subtle);
+  transform: translateY(110%);
+  transition: transform var(--duration-slow) var(--ease-out-expo);
+}
+.rail.is-visible { transform: none; }
+@media (min-width: 48rem) { .rail { display: none; } }
+
+/* The rail is fixed, so the last of the page would sit permanently
+   underneath it. Reserve its height at the end of the document. */
+@media (max-width: 47.999rem) {
+  body { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
+}
+
+/* ============================================================
+   ARRIVAL RIBBON  ·  the approval signal, before the scroll
+   The visitor clicked through from Ramsey. This answers "did I land
+   in the right place?" in the first frame, without stealing the hero.
+   ============================================================ */
+
+.arrival {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: var(--z-content);
+  padding-block: var(--space-3);
+  background: linear-gradient(to bottom, rgba(10, 9, 12, 0.82), rgba(10, 9, 12, 0.4) 70%, transparent);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent);
+}
+
+.arrival__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Official asset — aspect ratio locked, never cropped or recoloured. */
+.arrival__shield {
+  flex: none;
+  width: 3.25rem;
+  height: auto;
+}
+
+.arrival__text {
+  display: grid;
+  gap: 1px;
+  line-height: var(--leading-snug);
+}
+.arrival__text strong {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink-900);
+}
+.arrival__text span {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+}
+
+@media (min-width: 48rem) {
+  .arrival__shield { width: 3.75rem; }
+  .arrival__text strong { font-size: var(--text-base); }
+}
+
+/* Push the hero copy clear of the ribbon. */
+.hero__inner { padding-block-start: clamp(7.5rem, 18vh, 11rem); }
+
+/* ============================================================
+   RAMSEY PLATE  ·  the designed room 04_COMPLIANCE.md §1 demands
+   The graphic is square and stays square. The plate gives it clear
+   space and a border so it reads as a placed credential rather than
+   a screenshot dropped onto the page.
+   ============================================================ */
+
+.ramsey-plate {
+  margin: 0;
+  flex: none;
+  width: clamp(14rem, 30vw, 20rem);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--shadow-lg), var(--edge-light);
+  line-height: 0;
+}
+.ramsey-plate img { width: 100%; height: auto; }
+
+.marks { align-items: flex-start; gap: var(--space-8); }
+.marks__brand { display: grid; gap: var(--space-4); justify-items: start; }
+.marks__shield { width: 9rem; height: auto; }
+.marks__claim {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+.marks__logo { width: clamp(11rem, 24vw, 16rem); height: auto; }
+
+/* The small stamp near the bottom. */
+.footer__shield { width: 5.5rem; height: auto; flex: none; }

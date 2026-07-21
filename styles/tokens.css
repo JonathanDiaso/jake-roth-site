@@ -1,0 +1,207 @@
+/* ============================================================
+   01 — DESIGN TOKENS  ·  DIRECTION: NIGHT GLASS  ·  LOCKED
+   The ONLY permitted values. Nothing inline, ever.
+   See docs/01_DESIGN_SYSTEM.md
+   ============================================================ */
+
+:root {
+  /* --- COLOR · SURFACE -------------------------------------
+     Warm-leaning near-black. Never pure #000 — pure black on an
+     OLED phone kills the sense of depth the whole design rests on. */
+  --color-surface-sunken: #050406;
+  --color-surface-base:   #0A090C;
+  --color-surface-raised: #131117;
+  --color-surface-glass:  rgba(255, 255, 255, 0.04);
+  --color-surface-glass-strong: rgba(255, 255, 255, 0.07);
+
+  /* --- COLOR · INK -----------------------------------------
+     Every value verified against --color-surface-base for WCAG AA. */
+  --color-ink-900: #FFFFFF;   /* 19.6:1 — headlines */
+  --color-ink-700: #E8E6EC;   /* 16.1:1 — body */
+  --color-ink-500: #A5A1AE;   /*  7.9:1 — secondary body */
+  --color-ink-300: #8B8794;   /*  5.5:1 — labels, meta. FLOOR. */
+
+  /* --- COLOR · BRAND ---------------------------------------
+     Sampled from pinkrealty.com production CSS on 2026-07-21.
+     NOT invented. Re-sample from the official SVG when supplied. */
+  --color-brand-pink:      #E01384;  /* 4.3:1 on base — LARGE TEXT + UI ONLY */
+  --color-brand-pink-deep: #D9017A;
+  --color-brand-pink-glow: #FF4FA8;  /* 6.6:1 on base — the only pink safe for small text */
+  --color-brand-pink-wash: rgba(224, 19, 132, 0.14);
+
+  /* --- COLOR · RAMSEY --------------------------------------
+     PROVISIONAL. Must be sampled from the official badge asset,
+     never invented. The badge itself is never recolored. */
+  --color-ramsey-navy:      #0E2A47;
+  --color-ramsey-navy-lift: #16385C;
+
+  /* --- COLOR · THE ROCK BRIDGE -----------------------------
+     Sampled directly out of Jake's own Garden of the Gods photograph
+     on 2026-07-21 (2,020 px of red rock, averaged).
+
+         rock          #B1613F   H 18
+         sunlit rock   #D28F69   H 22
+         ember         #C4526B   H 345   <- the bridge tone
+         brand pink    #E01384   H 326
+         his tie       #942257   H 332
+
+     A 42° arc across the warm side of the wheel. Because the brand
+     pink is reached by walking out of the actual landscape, it reads
+     as native to Colorado Springs rather than applied on top of it.
+     Nobody will consciously notice. Everybody will feel it. */
+  --color-rock:      #B1613F;
+  --color-rock-lit:  #D28F69;
+  --color-ember:     #C4526B;
+  --color-ember-wash: rgba(196, 82, 107, 0.16);
+
+  /* --- COLOR · ACCENT --------------------------------------
+     Warm amber keeps the dark field from reading cold to a
+     first-time buyer. This token is why the page feels human. */
+  --color-accent-warm: #FF9E5E;
+  --color-accent-warm-wash: rgba(255, 158, 94, 0.10);
+
+  /* --- COLOR · LINE & STATE -------------------------------- */
+  --color-line-subtle: rgba(255, 255, 255, 0.08);
+  --color-line-strong: rgba(255, 255, 255, 0.16);
+  --color-state-success: #4ADE80;
+  --color-state-error:   #FF6B6B;
+
+  /* --- COLOR · FOCUS ---------------------------------------
+     Deliberately NOT pink. A focus ring must never be confusable
+     with a brand accent, or keyboard users lose their place. */
+  --color-focus: #7FD4FF;
+
+  /* --- TYPE · FAMILIES -------------------------------------
+     Two families, four weights. Perf budget: 02_MOTION.md
+
+     DISPLAY — Instrument Serif. High-contrast editorial serif with real
+     presence at size. Chosen over Playfair Display *because* Playfair is
+     the default luxury pick: it appears on so many agent and boutique
+     sites that it now signals "template" on sight. Instrument Serif
+     delivers the same expensive thick/thin contrast without the tell.
+
+     BODY/UI — Inter Tight. Inter's negative-tracking cut. At label and
+     UI sizes the tighter set width reads deliberately drawn rather than
+     defaulted, while keeping Inter's screen legibility and its tabular
+     figures — which is why the Affordability Engine needs no third
+     family for its numbers. */
+  --font-display: 'Instrument Serif', 'Times New Roman', serif;
+  --font-body: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* --- TYPE · SCALE ----------------------------------------
+     Fluid. Dramatic display↔body contrast is the #1 reason a page
+     reads considered instead of generic. Ratio at desktop ≈ 7:1. */
+  --text-xs:   0.75rem;
+  --text-sm:   0.8125rem;
+  --text-base: 1rem;
+  --text-lg:   clamp(1.0625rem, 0.4vw + 0.95rem, 1.1875rem);
+  --text-xl:   clamp(1.25rem,  0.8vw + 1.05rem, 1.5rem);
+  --text-2xl:  clamp(1.5rem,   1.4vw + 1.15rem, 2rem);
+  --text-3xl:  clamp(1.875rem, 2.6vw + 1.25rem, 2.75rem);
+  --text-4xl:  clamp(2.25rem,  4.4vw + 1.25rem, 4rem);
+  --text-5xl:  clamp(2.75rem,  6.5vw + 1.1rem,  5.5rem);
+  --text-6xl:  clamp(3.25rem,  9vw + 1rem,      7.5rem);
+  --text-7xl:  clamp(3.75rem,  12vw + 0.75rem,  10.5rem);
+
+  --leading-none:    0.92;
+  --leading-tight:   1.05;
+  --leading-snug:    1.25;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+
+  --tracking-tighter: -0.035em;
+  --tracking-tight:   -0.018em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.08em;
+  --tracking-widest:  0.2em;
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+
+  /* --- SPACE -----------------------------------------------
+     One scale. Every margin, padding and gap comes from here. */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-48: 12rem;
+
+  --section-gap-sm: clamp(2.5rem, 5vw, 3.5rem);
+  --section-gap-md: clamp(3.5rem, 7vw, 5.5rem);
+  --section-gap-lg: clamp(4.5rem, 9vw, 7rem);
+  --section-gap-xl: clamp(6rem, 12vw, 10rem);
+
+  --container-narrow:  42rem;
+  --container-default: 68rem;
+  --container-wide:    82rem;
+
+  --gutter-mobile:  1.25rem;
+  --gutter-tablet:  2.5rem;
+  --gutter-desktop: 4rem;
+  --gutter: var(--gutter-mobile);
+
+  /* --- RADIUS ---------------------------------------------- */
+  --radius-sm:   0.375rem;
+  --radius-md:   0.625rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.5rem;
+  --radius-full: 999px;
+
+  /* --- ELEVATION -------------------------------------------
+     On a dark ground, elevation is LIGHT, not shadow. Drop shadows
+     are invisible on near-black — this is the mistake that makes
+     dark sites look flat. We lift with edge-light instead. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 24px 64px -16px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 48px -8px rgba(224, 19, 132, 0.45);
+  --shadow-glow-warm: 0 0 64px -12px rgba(255, 158, 94, 0.3);
+  --edge-light: inset 0 1px 0 0 rgba(255, 255, 255, 0.09);
+  --edge-light-pink: inset 0 1px 0 0 rgba(255, 79, 168, 0.35);
+
+  /* --- MOTION ----------------------------------------------
+     Single source of truth. See docs/02_MOTION.md
+     Character: fast to start, slow to settle. Motion should feel
+     inevitable — as if the element was always going to land there. */
+  --ease-out-expo:     cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring:       cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-linear:       linear;
+
+  --duration-instant:   100ms;
+  --duration-fast:      200ms;
+  --duration-base:      320ms;
+  --duration-slow:      500ms;
+  --duration-cinematic: 800ms;
+
+  /* --- LAYERS ---------------------------------------------- */
+  --z-terrain: 0;
+  --z-bloom:   1;
+  --z-grain:   2;
+  --z-content: 10;
+  --z-rail:    50;
+  --z-cursor:  100;
+}
+
+@media (min-width: 48rem)  { :root { --gutter: var(--gutter-tablet); } }
+@media (min-width: 64rem)  { :root { --gutter: var(--gutter-desktop); } }
+
+/* Reduced motion collapses every duration to near-zero at the token
+   level, so no component has to remember to handle it individually.
+   02_MOTION.md: reduced motion must never mean a reduced site. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant:   1ms;
+    --duration-fast:      1ms;
+    --duration-base:      1ms;
+    --duration-slow:      1ms;
+    --duration-cinematic: 1ms;
+  }
+}
