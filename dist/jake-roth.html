@@ -2155,15 +2155,28 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   }
   /* A pink rim behind him separates the portrait from the rock face
      without putting a box around it. */
+  /* He stands in pink light, not a black hole. The deep brand pink sits
+     at the core with the ember bridge tone falling off around it, so the
+     glow reads as the same light that runs through the rest of the page
+     rather than as a shadow cut out of the photograph. */
   .hero__portrait::before {
     content: '';
     position: absolute;
-    inset: -18% -24% -10%;
+    inset: -22% -30% -14%;
     z-index: -1;
     background:
-      radial-gradient(58% 52% at 50% 44%, rgba(10, 9, 12, 0.92), rgba(10, 9, 12, 0.45) 62%, transparent 82%),
-      radial-gradient(70% 62% at 50% 50%, var(--color-brand-pink-wash), transparent 74%);
+      /* A RING, not a disc. The bright core is hollow so the light rims
+         him instead of washing over the face — filling the centre made
+         the subject disappear into his own glow. */
+      radial-gradient(closest-side circle at 50% 44%,
+        transparent 38%,
+        rgba(224, 19, 132, 0.34) 56%,
+        rgba(196, 82, 107, 0.18) 70%,
+        transparent 84%),
+      radial-gradient(78% 72% at 50% 50%, rgba(10, 9, 12, 0.6), transparent 82%);
+    filter: blur(14px);
   }
+  .hero__portrait { will-change: transform, opacity; }
 }
 
 /* --- Doors as editorial type, not boxes --------------------- */
@@ -2299,6 +2312,33 @@ html:not(.js-on) .hero__media img { opacity: 1; }
 .prow { cursor: default; transition: background-color var(--duration-fast) var(--ease-out-expo); }
 .prow.is-hot { background: rgba(224, 19, 132, 0.07); }
 
+
+/* --- Compact hero identity for phones and tablets ------------
+   The large portrait only appears at 64rem+. Below that this puts his
+   face beside the eyebrow so a referral still sees a person instantly. */
+.hero__whois {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+.hero__whois img {
+  width: 2.75rem; height: 2.75rem;
+  flex: none;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--color-brand-pink);
+  box-shadow: 0 0 22px -4px rgba(224, 19, 132, 0.65);
+}
+.hero__whois .hero__eyebrow { margin-bottom: 0; }
+.hero__whois .eyebrow::before { display: none; }
+
+@media (min-width: 64rem) {
+  /* The full portrait is present, so the thumbnail would be redundant. */
+  .hero__whois img { display: none; }
+  .hero__whois .eyebrow::before { display: block; }
+}
+
 </style>
 
 <a class="skip-link" href="#main">Skip to content</a>
@@ -2334,7 +2374,12 @@ html:not(.js-on) .hero__media img { opacity: 1; }
 
     <div class="container container--wide hero__inner">
       <div class="hero__copy">
-        <p class="eyebrow hero__eyebrow">Colorado Springs · Pink Realty</p>
+        <!-- Phones and tablets never see the large portrait, and mobile is
+             most of the traffic, so he still has to appear above the fold. -->
+        <p class="hero__whois">
+          <img src="data:image/webp;base64,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" alt="" width="160" height="160" decoding="async">
+          <span class="eyebrow hero__eyebrow">Colorado Springs · Pink Realty</span>
+        </p>
 
         <h1 class="display hero__name" data-name-reveal>Jake Roth</h1>
         <hr class="hero__rule">
@@ -3443,7 +3488,7 @@ function initPressBloom() {
    to scroll POSITION, not to a timer, so it is interruptible and
    reversible by definition and never fights native scroll speed.
    Transform and opacity only — no layout is read or written. */
-function initHeroScrub(picture, copy) {
+function initHeroScrub(picture, copy, portrait) {
   if (!picture || reduced() || window.innerWidth < 768) return;
 
   const hero = picture.closest('.hero');
@@ -3459,6 +3504,15 @@ function initHeroScrub(picture, copy) {
     if (copy) {
       copy.style.transform = `translate3d(0, ${(-p * 14).toFixed(2)}%, 0)`;
       copy.style.opacity = String(Math.max(0, 1 - p * 1.45));
+    }
+    /* The portrait rises faster than the copy and fades sooner, so the
+       hero separates into layers as it leaves rather than sliding away
+       as one flat card. He is the nearest thing to the viewer, so he
+       moves the most — that is what sells the depth. */
+    if (portrait) {
+      portrait.style.transform =
+        `translate3d(0, ${(-p * 26).toFixed(2)}%, 0) scale(${(1 - p * 0.06).toFixed(4)})`;
+      portrait.style.opacity = String(Math.max(0, 1 - p * 1.9));
     }
     ticking = false;
   };
@@ -3632,11 +3686,13 @@ function initAtlas(canvas, opts = {}) {
      degree of latitude, Mercator's distortion here is sub-pixel. */
   function project(lat, lng) {
     const k = Math.cos(((b.n + b.s) / 2 * Math.PI) / 180);
-    const x0 = (b.w - 0.035) * k, x1 = (b.e + 0.02) * k;
-    const y0 = b.n + 0.03, y1 = b.s - 0.03;
+    /* Asymmetric padding: a little room west of Pikes Peak for the range
+       band, less east, since Schriever already sits at the far edge. */
+    const x0 = (b.w - 0.012) * k, x1 = (b.e + 0.03) * k;
+    const y0 = b.n + 0.022, y1 = b.s - 0.028;
     return {
-      x: (0.06 + ((lng * k - x0) / (x1 - x0)) * 0.88) * w,
-      y: (0.07 + ((y0 - lat) / (y0 - y1)) * 0.86) * h,
+      x: (0.145 + ((lng * k - x0) / (x1 - x0)) * 0.80) * w,
+      y: (0.09 + ((y0 - lat) / (y0 - y1)) * 0.83) * h,
     };
   }
 
@@ -3662,79 +3718,92 @@ function initAtlas(canvas, opts = {}) {
 
   function resize() { syncSize(); draw(); }
 
-  /* --- The Front Range, drawn as relief with Pikes Peak named --- */
+  /* --- The Front Range along the western edge -----------------
+     Earlier this drew a large elevation-view mountain in the middle of a
+     plan-view map. Two projections fighting in one frame, and the peak
+     outgrew the data it was supposed to give context to.
+
+     Now the range is a silhouette band pinned to the west edge — which
+     is where the Front Range actually is relative to the city — and
+     Pikes Peak is a compact snow-capped summit at its true position.
+     Context, not subject. */
   function drawRelief() {
     const peak = project(38.8405, -105.0442);
-    const baseY = h * 0.94;
+    const edge = peak.x + w * 0.045;
 
-    /* Back ridge — the range continuing north and south of the summit. */
+    ctx.save();
     ctx.beginPath();
-    ctx.moveTo(-10, baseY);
-    const ridge = [
-      [-10, h * 0.30], [w * 0.045, h * 0.20], [w * 0.085, h * 0.34],
-      [w * 0.12, h * 0.25], [w * 0.155, h * 0.40], [w * 0.185, h * 0.33],
-      [w * 0.21, h * 0.48],
-    ];
-    ridge.forEach(([x, y]) => ctx.lineTo(x, y));
-    ctx.lineTo(w * 0.21, baseY);
+    ctx.moveTo(-4, h + 4);
+    /* Deterministic ridgeline: same silhouette every load, because this
+       is a place, not a random pattern. */
+    for (let i = 0; i <= 26; i++) {
+      const y = (i / 26) * (h + 8) - 4;
+      const n = Math.sin(i * 1.31) * 0.5 + Math.sin(i * 0.47) * 0.34 + Math.sin(i * 2.9) * 0.16;
+      ctx.lineTo(edge + n * w * 0.032, y);
+    }
+    ctx.lineTo(-4, h + 4);
     ctx.closePath();
-    ctx.fillStyle = ROCK + '0.10)';
+    const band = ctx.createLinearGradient(0, 0, edge, 0);
+    band.addColorStop(0, ROCK + '0.22)');
+    band.addColorStop(1, ROCK + '0.05)');
+    ctx.fillStyle = band;
     ctx.fill();
-    ctx.strokeStyle = ROCK + '0.34)';
+    ctx.strokeStyle = ROCK + '0.42)';
     ctx.lineWidth = 1;
     ctx.stroke();
+    ctx.restore();
 
-    /* Pikes Peak itself — a real summit, front-most, with a snow cap. */
-    const pw = w * 0.085;
-    const ph = h * 0.34;
-    const apex = { x: peak.x, y: peak.y - ph * 0.42 };
+    /* Pikes Peak — small, precise, and at its real coordinates. */
+    const pw = w * 0.055;
+    const ph = h * 0.115;
+    const apex = { x: peak.x, y: peak.y - ph * 0.5 };
 
+    ctx.save();
     ctx.beginPath();
-    ctx.moveTo(apex.x - pw, baseY);
-    ctx.lineTo(apex.x - pw * 0.42, apex.y + ph * 0.42);
-    ctx.lineTo(apex.x - pw * 0.16, apex.y + ph * 0.10);
+    ctx.moveTo(apex.x - pw, apex.y + ph);
+    ctx.lineTo(apex.x - pw * 0.34, apex.y + ph * 0.30);
+    ctx.lineTo(apex.x - pw * 0.12, apex.y + ph * 0.44);
     ctx.lineTo(apex.x, apex.y);
-    ctx.lineTo(apex.x + pw * 0.22, apex.y + ph * 0.16);
-    ctx.lineTo(apex.x + pw * 0.55, apex.y + ph * 0.38);
-    ctx.lineTo(apex.x + pw, baseY);
+    ctx.lineTo(apex.x + pw * 0.26, apex.y + ph * 0.34);
+    ctx.lineTo(apex.x + pw * 0.5, apex.y + ph * 0.20);
+    ctx.lineTo(apex.x + pw, apex.y + ph);
     ctx.closePath();
-    const g = ctx.createLinearGradient(apex.x, apex.y, apex.x, baseY);
-    g.addColorStop(0, ROCK + '0.32)');
-    g.addColorStop(1, ROCK + '0.05)');
+    const g = ctx.createLinearGradient(apex.x, apex.y, apex.x, apex.y + ph);
+    g.addColorStop(0, 'rgba(210,143,105,0.55)');
+    g.addColorStop(1, ROCK + '0.16)');
     ctx.fillStyle = g;
     ctx.fill();
-    ctx.strokeStyle = ROCK + '0.6)';
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = 'rgba(210,143,105,0.75)';
+    ctx.lineWidth = 1.1;
     ctx.stroke();
 
-    /* Snow cap. Clipped to the summit silhouette so it can never spill
-       outside the mountain, with a ragged lower edge — a straight line
-       across the top would read as a triangle with a hat on it. */
-    ctx.save();
+    /* Snow, clipped inside the summit so it can never spill. */
     ctx.clip();
     ctx.beginPath();
-    ctx.moveTo(apex.x - pw * 0.5, apex.y + ph * 0.40);
-    ctx.lineTo(apex.x - pw * 0.34, apex.y + ph * 0.22);
-    ctx.lineTo(apex.x - pw * 0.20, apex.y + ph * 0.30);
-    ctx.lineTo(apex.x - pw * 0.06, apex.y + ph * 0.09);
-    ctx.lineTo(apex.x + pw * 0.06, apex.y + ph * 0.22);
-    ctx.lineTo(apex.x + pw * 0.20, apex.y + ph * 0.14);
-    ctx.lineTo(apex.x + pw * 0.34, apex.y + ph * 0.34);
-    ctx.lineTo(apex.x + pw * 0.6, apex.y + ph * 0.46);
-    ctx.lineTo(apex.x + pw, apex.y - 4);
-    ctx.lineTo(apex.x - pw, apex.y - 4);
+    ctx.moveTo(apex.x - pw, apex.y + ph * 0.46);
+    ctx.lineTo(apex.x - pw * 0.42, apex.y + ph * 0.26);
+    ctx.lineTo(apex.x - pw * 0.2, apex.y + ph * 0.38);
+    ctx.lineTo(apex.x, apex.y + ph * 0.10);
+    ctx.lineTo(apex.x + pw * 0.24, apex.y + ph * 0.30);
+    ctx.lineTo(apex.x + pw * 0.52, apex.y + ph * 0.18);
+    ctx.lineTo(apex.x + pw, apex.y + ph * 0.42);
+    ctx.lineTo(apex.x + pw, apex.y - 2);
+    ctx.lineTo(apex.x - pw, apex.y - 2);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(255,255,255,0.88)';
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
     ctx.fill();
     ctx.restore();
 
-    ctx.font = '600 9px "Inter Tight", system-ui, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.save();
     ctx.textAlign = 'center';
-    ctx.fillText('PIKES PEAK', apex.x, baseY - h * 0.03);
+    ctx.font = '600 9px "Inter Tight", system-ui, sans-serif';
+    ctx.shadowColor = 'rgba(5,4,6,0.95)'; ctx.shadowBlur = 6;
+    ctx.fillStyle = 'rgba(255,255,255,0.62)';
+    ctx.fillText('PIKES PEAK', apex.x, apex.y + ph + 13);
     ctx.font = '400 8px "Inter Tight", system-ui, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.28)';
-    ctx.fillText('14,115 FT', apex.x, baseY - h * 0.03 + 11);
+    ctx.fillStyle = 'rgba(255,255,255,0.34)';
+    ctx.fillText('14,115 FT', apex.x, apex.y + ph + 24);
+    ctx.restore();
   }
 
   function drawLandmarks() {
@@ -3784,7 +3853,7 @@ function initAtlas(canvas, opts = {}) {
          the row-to-map link is unmistakable. */
       ctx.save();
       ctx.translate(p.x, p.y);
-      ctx.scale(hot ? 1.5 : 1.1, hot ? 1.5 : 1.1);
+      ctx.scale(hot ? 1.65 : 1.25, hot ? 1.65 : 1.25);
       ctx.lineWidth = hot ? 1.5 : 1.2;
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
@@ -4420,7 +4489,7 @@ function boot() {
     atlas?.setHover(null);
   });
 
-  initHeroScrub($('[data-hero-scrub]'), $('.hero__copy'));
+  initHeroScrub($('[data-hero-scrub]'), $('.hero__copy'), $('.hero__portrait'));
   initNameReveal($('[data-name-reveal]'));
   initPressBloom();
   initReveal();

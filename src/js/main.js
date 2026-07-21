@@ -319,7 +319,7 @@ function boot() {
     atlas?.setHover(null);
   });
 
-  initHeroScrub($('[data-hero-scrub]'), $('.hero__copy'));
+  initHeroScrub($('[data-hero-scrub]'), $('.hero__copy'), $('.hero__portrait'));
   initNameReveal($('[data-name-reveal]'));
   initPressBloom();
   initReveal();
