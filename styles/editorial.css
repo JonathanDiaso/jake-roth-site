@@ -1,0 +1,392 @@
+/* ============================================================
+   EDITORIAL  ·  the anti-box layer
+   Every component used to be the same translucent rounded rectangle.
+   Eleven of them, one shape, even grid. That uniformity is the single
+   most recognisable tell of generated design.
+
+   What replaces it: hairline rules, real index numbers where sequence
+   is true, asymmetric spans, flush-left structure. Radius is earned.
+   ============================================================ */
+
+/* --- Index numbers ------------------------------------------
+   Used ONLY where order carries meaning: the three buyer tracks are a
+   self-selection, and the seller steps are an actual sequence. They are
+   not applied to the Atlas, where order would be arbitrary. */
+.idx {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: 1;
+  color: var(--color-brand-pink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Rule card · replaces .track ---------------------------- */
+
+.rcard {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6) 0 var(--space-8);
+  border-top: 1px solid var(--color-line-subtle);
+  background: none;
+  border-radius: 0;
+  transition: border-color var(--duration-base) var(--ease-out-expo);
+}
+
+/* The pink hairline grows out of the left on hover — the rule itself is
+   the affordance, so no box has to appear to signal interactivity. */
+.rcard::before {
+  content: '';
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline-start: 0;
+  height: 1px;
+  width: 0;
+  background: var(--color-brand-pink);
+  transition: width var(--duration-slow) var(--ease-out-expo);
+}
+.rcard:hover::before,
+.rcard:focus-within::before { width: 100%; }
+
+.rcard__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+.rcard__title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink-900);
+  text-wrap: balance;
+}
+.rcard__body {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-ink-500);
+  max-width: 38ch;
+}
+.rcard__list { display: grid; gap: var(--space-2); }
+.rcard__list li {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--color-ink-300);
+}
+.rcard__list li::before {
+  content: '';
+  width: 8px; height: 1px;
+  background: var(--color-brand-pink);
+  align-self: center;
+}
+
+/* Staggered spans. A dead-even three-up grid is what makes a page read
+   as a template; dropping the middle column breaks the rhythm without
+   breaking the alignment. */
+.rgrid { display: grid; gap: var(--space-8); }
+@media (min-width: 56rem) {
+  .rgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-12); }
+  .rgrid > :nth-child(2) { transform: translateY(var(--space-12)); }
+}
+
+/* --- Place row · replaces the .place card grid --------------
+   A price ladder is a list, not a set of tiles. Rendering it as ruled
+   rows makes the ordering legible at a glance and kills twelve boxes. */
+
+.plist { display: grid; }
+
+.prow {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--color-line-subtle);
+  position: relative;
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              filter var(--duration-slow) var(--ease-out-expo);
+}
+@media (min-width: 48rem) {
+  .prow { grid-template-columns: 10rem 1fr 9rem auto; gap: var(--space-6); }
+}
+
+.prow__name {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  color: var(--color-ink-900);
+}
+.prow__fact {
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--color-ink-300);
+  display: none;
+}
+@media (min-width: 48rem) { .prow__fact { display: block; } }
+
+.prow__price {
+  font-size: var(--text-base);
+  color: var(--color-ink-500);
+  font-variant-numeric: tabular-nums;
+}
+.prow__state {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+  white-space: nowrap;
+}
+
+/* In reach: the row lights from the left edge. Out of reach stays fully
+   readable — honesty is the product, so nothing is hidden. */
+.prow--in { }
+.prow--in .prow__name { color: var(--color-ink-900); }
+.prow--in .prow__price { color: var(--color-brand-pink-glow); }
+.prow--in .prow__state { color: var(--color-brand-pink-glow); }
+.prow--in::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--gutter) * -1);
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--color-brand-pink), transparent);
+}
+.prow--out { opacity: 0.5; }
+
+/* --- Quote · rule-based, no box ----------------------------- */
+
+.qcard {
+  width: min(26rem, 80vw);
+  flex: none;
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-8) var(--space-6) 0;
+  border-inline-end: 1px solid var(--color-line-subtle);
+  background: none;
+  border-radius: 0;
+  backdrop-filter: none;
+}
+.qcard__text {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  color: var(--color-ink-700);
+}
+.qcard__who {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+}
+
+/* --- Market strip ------------------------------------------- */
+
+.market {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--color-line-strong);
+}
+@media (min-width: 48rem) {
+  .market { grid-template-columns: repeat(4, 1fr); border-inline-start: 1px solid var(--color-line-subtle); }
+}
+.market__cell {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-line-subtle);
+}
+@media (min-width: 48rem) {
+  .market__cell { border-inline-end: 1px solid var(--color-line-subtle); border-bottom: 0; }
+}
+.market__value {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  line-height: 1;
+  color: var(--color-ink-900);
+  font-variant-numeric: tabular-nums;
+}
+.market__label {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-ink-500);
+}
+.market__note { margin-top: var(--space-1); font-size: var(--text-xs); color: var(--color-ink-300); }
+
+/* --- Section bloom · pink present everywhere, never as a wall */
+.bloom { position: relative; isolation: isolate; }
+.bloom::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(48rem 28rem at var(--bloom-x, 80%) var(--bloom-y, 20%),
+              var(--color-brand-pink-wash), transparent 68%);
+}
+
+/* --- Signature wordmark -------------------------------------
+   NOT a reproduction of Jake's handwriting. A designed script logotype,
+   set in the display face's italic. Forging a real person's signature
+   would be an identity artifact; this is openly a wordmark.
+   Replace with a real scan when available. */
+.sigmark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-4xl);
+  line-height: 1;
+  color: var(--color-brand-pink-glow);
+  letter-spacing: -0.02em;
+}
+.sigmark__rule {
+  margin-top: var(--space-3);
+  width: 7rem;
+  height: 1px;
+  background: linear-gradient(to right, var(--color-brand-pink), transparent);
+  border: 0;
+}
+.sigmark__note {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+}
+
+/* ============================================================
+   SIDE RAIL  ·  always reachable, never interruptive
+   03_ARCHITECTURE.md bans exit-intent popups and interrupting chat
+   widgets. This is the opposite: a tab that sits still, waits, and
+   only opens when the visitor asks it to.
+   ============================================================ */
+
+.siderail { position: fixed; inset-block-start: 50%; inset-inline-end: 0; z-index: var(--z-rail); display: none; }
+@media (min-width: 64rem) { .siderail { display: block; } }
+
+.siderail__tab {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 3.5rem;
+  padding: var(--space-3) var(--space-5) var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line-strong);
+  border-inline-end: 0;
+  border-start-start-radius: var(--radius-full);
+  border-end-start-radius: var(--radius-full);
+  background: rgba(19, 17, 23, 0.82);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: var(--edge-light), var(--shadow-lg);
+  color: var(--color-ink-900);
+  cursor: pointer;
+  font: inherit;
+  transition: transform var(--duration-base) var(--ease-out-expo),
+              border-color var(--duration-base) var(--ease-out-expo),
+              box-shadow var(--duration-base) var(--ease-out-expo);
+}
+.siderail__tab:hover {
+  transform: translateY(-50%) translateX(-4px);
+  border-color: var(--color-brand-pink);
+  box-shadow: var(--edge-light-pink), var(--shadow-glow);
+}
+.siderail__avatar {
+  width: 2.25rem; height: 2.25rem;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--color-brand-pink);
+  flex: none;
+}
+.siderail__label { display: grid; gap: 1px; text-align: left; white-space: nowrap; }
+.siderail__label b { font-size: var(--text-sm); font-weight: var(--weight-medium); }
+.siderail__label span {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-brand-pink-glow);
+}
+
+/* A live pink dot. The only always-animating element on the page, and
+   it is small enough never to compete with reading. */
+.siderail__dot {
+  width: 7px; height: 7px; flex: none;
+  border-radius: var(--radius-full);
+  background: var(--color-brand-pink);
+  box-shadow: 0 0 0 0 rgba(224, 19, 132, 0.6);
+  animation: rail-pulse 2.6s var(--ease-out-expo) infinite;
+}
+@keyframes rail-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(224, 19, 132, 0.55); }
+  70%  { box-shadow: 0 0 0 12px rgba(224, 19, 132, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(224, 19, 132, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .siderail__dot { animation: none; } }
+
+.siderail__panel {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: var(--space-4);
+  transform: translateY(-50%) translateX(120%);
+  width: 23rem;
+  padding: var(--space-8);
+  display: grid;
+  gap: var(--space-5);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-xl);
+  background: rgba(19, 17, 23, 0.94);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: var(--edge-light), var(--shadow-lg), var(--shadow-glow);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform var(--duration-slow) var(--ease-out-expo),
+              opacity var(--duration-base) var(--ease-out-expo),
+              visibility 0s linear var(--duration-slow);
+}
+.siderail.is-open .siderail__panel {
+  transform: translateY(-50%) translateX(0);
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+.siderail.is-open .siderail__tab { opacity: 0; pointer-events: none; }
+
+.siderail__close {
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-end: var(--space-3);
+  width: 2.75rem; height: 2.75rem;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-ink-300);
+  cursor: pointer;
+}
+.siderail__close:hover { color: var(--color-ink-900); }
+
+.siderail__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  color: var(--color-ink-900);
+  max-width: 16ch;
+}
+.siderail__body { font-size: var(--text-sm); line-height: var(--leading-relaxed); color: var(--color-ink-500); }
+.siderail__points { display: grid; gap: var(--space-2); }
+.siderail__points li {
+  display: grid;
+  grid-template-columns: 1rem 1fr;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-ink-700);
+  line-height: var(--leading-snug);
+}
+.siderail__points li::before { content: ''; width: 7px; height: 7px; margin-top: 0.42em; border-radius: 50%; border: 1px solid var(--color-brand-pink); }
+.siderail__num {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-ink-300);
+  text-align: center;
+}

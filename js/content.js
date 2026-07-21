@@ -190,16 +190,58 @@ export const ASSUMPTIONS = {
    this array gets a Fair Housing pass before it ships.
    ⚠️ TODO — replace medians with your own current market data. */
 export const PLACES = [
-  { name: 'Westside condos',    median: 275000, fact: 'Attached homes west of downtown. Largely 1970s–1990s stock. Walkable to the Midland Trail and Bancroft Park.' },
-  { name: 'Southeast Springs',  median: 305000, fact: 'South of Airport Road, east of I-25. Predominantly 1960s–1980s builds on roughly 0.15 acre lots.' },
-  { name: 'Security-Widefield', median: 360000, fact: 'South of the city, about 10 minutes to Fort Carson. Housing stock largely 1960s–1990s. Near Big Johnson Reservoir.' },
-  { name: 'Fountain',           median: 390000, fact: 'About 12 minutes to Fort Carson Gate 20. Builds range 1970s–2000s on roughly 0.15–0.25 acre lots.' },
-  { name: 'Old Colorado City',  median: 450000, fact: 'Historic west side. Victorian and Craftsman stock from the 1890s–1930s. Walkable to Bancroft Park.' },
-  { name: 'Falcon',             median: 470000, fact: 'East of Powers along Highway 24. Predominantly 2000s-and-newer construction, many lots over 0.3 acre.' },
-  { name: 'Rockrimmon',         median: 520000, fact: 'Northwest against the foothills. 1970s–1990s builds on sloped lots. Trail access into Ute Valley Park.' },
-  { name: 'Briargate',          median: 560000, fact: 'North-central. Construction concentrated 1988–2004, median lot near 0.21 acre. Roughly 8 minutes to the Powers corridor.' },
-  { name: 'Cordera',            median: 625000, fact: 'North side, built 2006 onward. Community center and an internal trail network along Cottonwood Creek.' },
-  { name: 'Monument',           median: 720000, fact: 'About 20 minutes north on I-25. Larger parcels, many over one acre, with Pike National Forest access nearby.' },
-  { name: 'Flying Horse',       median: 800000, fact: 'North, at the foot of the Front Range. Golf course community developed 2004 onward.' },
-  { name: 'Broadmoor',          median: 1100000, fact: 'Southwest against Cheyenne Mountain. Mixed 1920s–present. Near Seven Falls and Cheyenne Mountain State Park.' },
+  { name: 'Westside condos',    median: 275000, lat: 38.8462, lng: -104.8536, era: '1970s\u20131990s', fact: 'Attached homes west of downtown. Walkable to the Midland Trail and Bancroft Park.' },
+  { name: 'Southeast Springs',  median: 305000, lat: 38.8003, lng: -104.7519, era: '1960s\u20131980s', fact: 'South of Airport Road, east of I-25. Roughly 0.15 acre lots.' },
+  { name: 'Security-Widefield', median: 360000, lat: 38.7478, lng: -104.7150, era: '1960s\u20131990s', fact: 'About 10 minutes to Fort Carson. Near Big Johnson Reservoir.' },
+  { name: 'Fountain',           median: 390000, lat: 38.6822, lng: -104.7000, era: '1970s\u20132000s', fact: 'About 12 minutes to Fort Carson Gate 20. Lots run 0.15\u20130.25 acre.' },
+  { name: 'Old Colorado City',  median: 450000, lat: 38.8464, lng: -104.8619, era: '1890s\u20131930s', fact: 'Historic west side. Victorian and Craftsman stock, walkable to Bancroft Park.' },
+  { name: 'Falcon',             median: 470000, lat: 38.9328, lng: -104.6089, era: '2000s\u2013now',   fact: 'East of Powers along Highway 24. Many lots over 0.3 acre.' },
+  { name: 'Rockrimmon',         median: 520000, lat: 38.9203, lng: -104.8464, era: '1970s\u20131990s', fact: 'Northwest against the foothills, sloped lots. Trail access into Ute Valley Park.' },
+  { name: 'Briargate',          median: 560000, lat: 38.9517, lng: -104.7686, era: '1988\u20132004',   fact: 'North-central. Median lot near 0.21 acre, about 8 minutes to the Powers corridor.' },
+  { name: 'Cordera',            median: 625000, lat: 38.9686, lng: -104.7250, era: '2006\u2013now',    fact: 'North side. Community center and an internal trail network along Cottonwood Creek.' },
+  { name: 'Monument',           median: 720000, lat: 39.0917, lng: -104.8722, era: 'mixed',        fact: 'About 20 minutes north on I-25. Many parcels over one acre, Pike National Forest nearby.' },
+  { name: 'Flying Horse',       median: 800000, lat: 38.9925, lng: -104.7683, era: '2004\u2013now',    fact: 'North, at the foot of the Front Range. Golf course community.' },
+  { name: 'Broadmoor',          median: 1100000, lat: 38.7906, lng: -104.8489, era: '1920s\u2013now',  fact: 'Southwest against Cheyenne Mountain. Near Seven Falls and Cheyenne Mountain State Park.' },
 ];
+
+/* Fixed geography the Atlas draws for orientation. Real coordinates —
+   the map is accurate, not decorative. The four installations are here
+   because Colorado Springs is a military town and "how far is my base"
+   is the single most common question a PCS buyer asks. */
+export const LANDMARKS = [
+  { name: 'Pikes Peak',   lat: 38.8405, lng: -105.0442, kind: 'peak' },
+  { name: 'Downtown',     lat: 38.8339, lng: -104.8214, kind: 'city' },
+  { name: 'Fort Carson',  lat: 38.7378, lng: -104.7891, kind: 'base' },
+  { name: 'Peterson SFB', lat: 38.8153, lng: -104.7008, kind: 'base' },
+  { name: 'USAFA',        lat: 38.9983, lng: -104.8614, kind: 'base' },
+  { name: 'Schriever SFB', lat: 38.8033, lng: -104.5286, kind: 'base' },
+];
+
+/* ⚠️ TODO Jake — refresh monthly from PPAR/MLS and update `asOf`.
+   A stale "live" number is worse than no number. There is no feed behind
+   this; it is owner-maintained on purpose, and the page says so. */
+export const MARKET = {
+  asOf: 'TODO_MONTH_YEAR',
+  source: 'Pikes Peak REALTOR\u00AE Services Corp.',
+  rows: [
+    { label: 'Median sale price',   value: 'TODO', note: 'El Paso County, all residential' },
+    { label: 'Median days on market', value: 'TODO', note: 'Listing to contract' },
+    { label: 'Months of inventory', value: 'TODO', note: 'Under 4 favours sellers' },
+    { label: 'Percent of list received', value: 'TODO', note: 'Countywide average' },
+  ],
+};
+
+/* Persistent side rail. ELP-appropriate: the Ramsey audience responds to
+   plain competence and zero pressure, not urgency tactics. */
+export const RAIL = {
+  eyebrow: 'Endorsed Local Provider',
+  tabEyebrow: 'Ramsey ELP',
+  title: 'Talk it through with Jake.',
+  body: 'No pitch, no pressure, and no obligation to list or buy. Ramsey vets its providers on exactly this: whether you get straight advice or a sales call.',
+  points: [
+    'A real conversation, usually 15 minutes',
+    'Your numbers reviewed against the 25% rule',
+    'An honest answer if now is the wrong time',
+  ],
+  cta: 'Call Jake now',
+};

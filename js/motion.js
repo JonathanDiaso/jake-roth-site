@@ -216,6 +216,41 @@ export function initPressBloom() {
   }, { passive: true });
 }
 
+/* --- §5 Scroll-scrub · the signature move ----------------------
+   The hero photograph scales and drifts against the copy as you leave
+   it, so the first screen is alive rather than a static poster. Bound
+   to scroll POSITION, not to a timer, so it is interruptible and
+   reversible by definition and never fights native scroll speed.
+   Transform and opacity only — no layout is read or written. */
+export function initHeroScrub(picture, copy) {
+  if (!picture || reduced() || window.innerWidth < 768) return;
+
+  const hero = picture.closest('.hero');
+  if (!hero) return;
+
+  let ticking = false;
+  const update = () => {
+    const h = hero.offsetHeight || 1;
+    const p = Math.min(Math.max(-hero.getBoundingClientRect().top / h, 0), 1);
+    // Photo pushes in slowly and sinks; copy rises faster and fades out.
+    picture.style.transform = `scale(${(1 + p * 0.16).toFixed(4)}) translate3d(0, ${(p * 4).toFixed(2)}%, 0)`;
+    picture.style.filter = `saturate(${(0.72 - p * 0.25).toFixed(3)}) contrast(1.08) brightness(${(1 - p * 0.25).toFixed(3)})`;
+    if (copy) {
+      copy.style.transform = `translate3d(0, ${(-p * 14).toFixed(2)}%, 0)`;
+      copy.style.opacity = String(Math.max(0, 1 - p * 1.45));
+    }
+    ticking = false;
+  };
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
+}
+
 /* --- Sticky contact rail · appears once past the hero ---------- */
 export function initRail(rail, sentinel) {
   if (!rail || !sentinel || !('IntersectionObserver' in window)) return;
