@@ -1,0 +1,5 @@
+# Preview build. Not indexable until Ramsey claim language and Pink Realty
+# brokerage permission are confirmed in writing (docs/04_COMPLIANCE.md).
+# Remove this file at launch.
+User-agent: *
+Disallow: /
