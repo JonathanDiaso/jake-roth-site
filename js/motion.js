@@ -222,7 +222,7 @@ export function initPressBloom() {
    to scroll POSITION, not to a timer, so it is interruptible and
    reversible by definition and never fights native scroll speed.
    Transform and opacity only — no layout is read or written. */
-export function initHeroScrub(picture, copy) {
+export function initHeroScrub(picture, copy, portrait) {
   if (!picture || reduced() || window.innerWidth < 768) return;
 
   const hero = picture.closest('.hero');
@@ -238,6 +238,15 @@ export function initHeroScrub(picture, copy) {
     if (copy) {
       copy.style.transform = `translate3d(0, ${(-p * 14).toFixed(2)}%, 0)`;
       copy.style.opacity = String(Math.max(0, 1 - p * 1.45));
+    }
+    /* The portrait rises faster than the copy and fades sooner, so the
+       hero separates into layers as it leaves rather than sliding away
+       as one flat card. He is the nearest thing to the viewer, so he
+       moves the most — that is what sells the depth. */
+    if (portrait) {
+      portrait.style.transform =
+        `translate3d(0, ${(-p * 26).toFixed(2)}%, 0) scale(${(1 - p * 0.06).toFixed(4)})`;
+      portrait.style.opacity = String(Math.max(0, 1 - p * 1.9));
     }
     ticking = false;
   };

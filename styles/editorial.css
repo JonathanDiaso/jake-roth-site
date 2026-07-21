@@ -433,15 +433,28 @@
   }
   /* A pink rim behind him separates the portrait from the rock face
      without putting a box around it. */
+  /* He stands in pink light, not a black hole. The deep brand pink sits
+     at the core with the ember bridge tone falling off around it, so the
+     glow reads as the same light that runs through the rest of the page
+     rather than as a shadow cut out of the photograph. */
   .hero__portrait::before {
     content: '';
     position: absolute;
-    inset: -18% -24% -10%;
+    inset: -22% -30% -14%;
     z-index: -1;
     background:
-      radial-gradient(58% 52% at 50% 44%, rgba(10, 9, 12, 0.92), rgba(10, 9, 12, 0.45) 62%, transparent 82%),
-      radial-gradient(70% 62% at 50% 50%, var(--color-brand-pink-wash), transparent 74%);
+      /* A RING, not a disc. The bright core is hollow so the light rims
+         him instead of washing over the face — filling the centre made
+         the subject disappear into his own glow. */
+      radial-gradient(closest-side circle at 50% 44%,
+        transparent 38%,
+        rgba(224, 19, 132, 0.34) 56%,
+        rgba(196, 82, 107, 0.18) 70%,
+        transparent 84%),
+      radial-gradient(78% 72% at 50% 50%, rgba(10, 9, 12, 0.6), transparent 82%);
+    filter: blur(14px);
   }
+  .hero__portrait { will-change: transform, opacity; }
 }
 
 /* --- Doors as editorial type, not boxes --------------------- */
@@ -576,3 +589,30 @@
 
 .prow { cursor: default; transition: background-color var(--duration-fast) var(--ease-out-expo); }
 .prow.is-hot { background: rgba(224, 19, 132, 0.07); }
+
+
+/* --- Compact hero identity for phones and tablets ------------
+   The large portrait only appears at 64rem+. Below that this puts his
+   face beside the eyebrow so a referral still sees a person instantly. */
+.hero__whois {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+.hero__whois img {
+  width: 2.75rem; height: 2.75rem;
+  flex: none;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--color-brand-pink);
+  box-shadow: 0 0 22px -4px rgba(224, 19, 132, 0.65);
+}
+.hero__whois .hero__eyebrow { margin-bottom: 0; }
+.hero__whois .eyebrow::before { display: none; }
+
+@media (min-width: 64rem) {
+  /* The full portrait is present, so the thumbnail would be redundant. */
+  .hero__whois img { display: none; }
+  .hero__whois .eyebrow::before { display: block; }
+}

@@ -78,7 +78,12 @@
 
     <div class="container container--wide hero__inner">
       <div class="hero__copy">
-        <p class="eyebrow hero__eyebrow">Colorado Springs · Pink Realty</p>
+        <!-- Phones and tablets never see the large portrait, and mobile is
+             most of the traffic, so he still has to appear above the fold. -->
+        <p class="hero__whois">
+          <img src="assets/avatar-160.webp" alt="" width="160" height="160" decoding="async">
+          <span class="eyebrow hero__eyebrow">Colorado Springs · Pink Realty</span>
+        </p>
 
         <h1 class="display hero__name" data-name-reveal>Jake Roth</h1>
         <hr class="hero__rule">

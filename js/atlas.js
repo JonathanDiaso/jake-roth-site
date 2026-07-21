@@ -150,11 +150,13 @@ export function initAtlas(canvas, opts = {}) {
      degree of latitude, Mercator's distortion here is sub-pixel. */
   function project(lat, lng) {
     const k = Math.cos(((b.n + b.s) / 2 * Math.PI) / 180);
-    const x0 = (b.w - 0.035) * k, x1 = (b.e + 0.02) * k;
-    const y0 = b.n + 0.03, y1 = b.s - 0.03;
+    /* Asymmetric padding: a little room west of Pikes Peak for the range
+       band, less east, since Schriever already sits at the far edge. */
+    const x0 = (b.w - 0.012) * k, x1 = (b.e + 0.03) * k;
+    const y0 = b.n + 0.022, y1 = b.s - 0.028;
     return {
-      x: (0.06 + ((lng * k - x0) / (x1 - x0)) * 0.88) * w,
-      y: (0.07 + ((y0 - lat) / (y0 - y1)) * 0.86) * h,
+      x: (0.145 + ((lng * k - x0) / (x1 - x0)) * 0.80) * w,
+      y: (0.09 + ((y0 - lat) / (y0 - y1)) * 0.83) * h,
     };
   }
 
@@ -180,79 +182,92 @@ export function initAtlas(canvas, opts = {}) {
 
   function resize() { syncSize(); draw(); }
 
-  /* --- The Front Range, drawn as relief with Pikes Peak named --- */
+  /* --- The Front Range along the western edge -----------------
+     Earlier this drew a large elevation-view mountain in the middle of a
+     plan-view map. Two projections fighting in one frame, and the peak
+     outgrew the data it was supposed to give context to.
+
+     Now the range is a silhouette band pinned to the west edge — which
+     is where the Front Range actually is relative to the city — and
+     Pikes Peak is a compact snow-capped summit at its true position.
+     Context, not subject. */
   function drawRelief() {
     const peak = project(38.8405, -105.0442);
-    const baseY = h * 0.94;
+    const edge = peak.x + w * 0.045;
 
-    /* Back ridge — the range continuing north and south of the summit. */
+    ctx.save();
     ctx.beginPath();
-    ctx.moveTo(-10, baseY);
-    const ridge = [
-      [-10, h * 0.30], [w * 0.045, h * 0.20], [w * 0.085, h * 0.34],
-      [w * 0.12, h * 0.25], [w * 0.155, h * 0.40], [w * 0.185, h * 0.33],
-      [w * 0.21, h * 0.48],
-    ];
-    ridge.forEach(([x, y]) => ctx.lineTo(x, y));
-    ctx.lineTo(w * 0.21, baseY);
+    ctx.moveTo(-4, h + 4);
+    /* Deterministic ridgeline: same silhouette every load, because this
+       is a place, not a random pattern. */
+    for (let i = 0; i <= 26; i++) {
+      const y = (i / 26) * (h + 8) - 4;
+      const n = Math.sin(i * 1.31) * 0.5 + Math.sin(i * 0.47) * 0.34 + Math.sin(i * 2.9) * 0.16;
+      ctx.lineTo(edge + n * w * 0.032, y);
+    }
+    ctx.lineTo(-4, h + 4);
     ctx.closePath();
-    ctx.fillStyle = ROCK + '0.10)';
+    const band = ctx.createLinearGradient(0, 0, edge, 0);
+    band.addColorStop(0, ROCK + '0.22)');
+    band.addColorStop(1, ROCK + '0.05)');
+    ctx.fillStyle = band;
     ctx.fill();
-    ctx.strokeStyle = ROCK + '0.34)';
+    ctx.strokeStyle = ROCK + '0.42)';
     ctx.lineWidth = 1;
     ctx.stroke();
+    ctx.restore();
 
-    /* Pikes Peak itself — a real summit, front-most, with a snow cap. */
-    const pw = w * 0.085;
-    const ph = h * 0.34;
-    const apex = { x: peak.x, y: peak.y - ph * 0.42 };
+    /* Pikes Peak — small, precise, and at its real coordinates. */
+    const pw = w * 0.055;
+    const ph = h * 0.115;
+    const apex = { x: peak.x, y: peak.y - ph * 0.5 };
 
+    ctx.save();
     ctx.beginPath();
-    ctx.moveTo(apex.x - pw, baseY);
-    ctx.lineTo(apex.x - pw * 0.42, apex.y + ph * 0.42);
-    ctx.lineTo(apex.x - pw * 0.16, apex.y + ph * 0.10);
+    ctx.moveTo(apex.x - pw, apex.y + ph);
+    ctx.lineTo(apex.x - pw * 0.34, apex.y + ph * 0.30);
+    ctx.lineTo(apex.x - pw * 0.12, apex.y + ph * 0.44);
     ctx.lineTo(apex.x, apex.y);
-    ctx.lineTo(apex.x + pw * 0.22, apex.y + ph * 0.16);
-    ctx.lineTo(apex.x + pw * 0.55, apex.y + ph * 0.38);
-    ctx.lineTo(apex.x + pw, baseY);
+    ctx.lineTo(apex.x + pw * 0.26, apex.y + ph * 0.34);
+    ctx.lineTo(apex.x + pw * 0.5, apex.y + ph * 0.20);
+    ctx.lineTo(apex.x + pw, apex.y + ph);
     ctx.closePath();
-    const g = ctx.createLinearGradient(apex.x, apex.y, apex.x, baseY);
-    g.addColorStop(0, ROCK + '0.32)');
-    g.addColorStop(1, ROCK + '0.05)');
+    const g = ctx.createLinearGradient(apex.x, apex.y, apex.x, apex.y + ph);
+    g.addColorStop(0, 'rgba(210,143,105,0.55)');
+    g.addColorStop(1, ROCK + '0.16)');
     ctx.fillStyle = g;
     ctx.fill();
-    ctx.strokeStyle = ROCK + '0.6)';
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = 'rgba(210,143,105,0.75)';
+    ctx.lineWidth = 1.1;
     ctx.stroke();
 
-    /* Snow cap. Clipped to the summit silhouette so it can never spill
-       outside the mountain, with a ragged lower edge — a straight line
-       across the top would read as a triangle with a hat on it. */
-    ctx.save();
+    /* Snow, clipped inside the summit so it can never spill. */
     ctx.clip();
     ctx.beginPath();
-    ctx.moveTo(apex.x - pw * 0.5, apex.y + ph * 0.40);
-    ctx.lineTo(apex.x - pw * 0.34, apex.y + ph * 0.22);
-    ctx.lineTo(apex.x - pw * 0.20, apex.y + ph * 0.30);
-    ctx.lineTo(apex.x - pw * 0.06, apex.y + ph * 0.09);
-    ctx.lineTo(apex.x + pw * 0.06, apex.y + ph * 0.22);
-    ctx.lineTo(apex.x + pw * 0.20, apex.y + ph * 0.14);
-    ctx.lineTo(apex.x + pw * 0.34, apex.y + ph * 0.34);
-    ctx.lineTo(apex.x + pw * 0.6, apex.y + ph * 0.46);
-    ctx.lineTo(apex.x + pw, apex.y - 4);
-    ctx.lineTo(apex.x - pw, apex.y - 4);
+    ctx.moveTo(apex.x - pw, apex.y + ph * 0.46);
+    ctx.lineTo(apex.x - pw * 0.42, apex.y + ph * 0.26);
+    ctx.lineTo(apex.x - pw * 0.2, apex.y + ph * 0.38);
+    ctx.lineTo(apex.x, apex.y + ph * 0.10);
+    ctx.lineTo(apex.x + pw * 0.24, apex.y + ph * 0.30);
+    ctx.lineTo(apex.x + pw * 0.52, apex.y + ph * 0.18);
+    ctx.lineTo(apex.x + pw, apex.y + ph * 0.42);
+    ctx.lineTo(apex.x + pw, apex.y - 2);
+    ctx.lineTo(apex.x - pw, apex.y - 2);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(255,255,255,0.88)';
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
     ctx.fill();
     ctx.restore();
 
-    ctx.font = '600 9px "Inter Tight", system-ui, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.save();
     ctx.textAlign = 'center';
-    ctx.fillText('PIKES PEAK', apex.x, baseY - h * 0.03);
+    ctx.font = '600 9px "Inter Tight", system-ui, sans-serif';
+    ctx.shadowColor = 'rgba(5,4,6,0.95)'; ctx.shadowBlur = 6;
+    ctx.fillStyle = 'rgba(255,255,255,0.62)';
+    ctx.fillText('PIKES PEAK', apex.x, apex.y + ph + 13);
     ctx.font = '400 8px "Inter Tight", system-ui, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.28)';
-    ctx.fillText('14,115 FT', apex.x, baseY - h * 0.03 + 11);
+    ctx.fillStyle = 'rgba(255,255,255,0.34)';
+    ctx.fillText('14,115 FT', apex.x, apex.y + ph + 24);
+    ctx.restore();
   }
 
   function drawLandmarks() {
@@ -302,7 +317,7 @@ export function initAtlas(canvas, opts = {}) {
          the row-to-map link is unmistakable. */
       ctx.save();
       ctx.translate(p.x, p.y);
-      ctx.scale(hot ? 1.5 : 1.1, hot ? 1.5 : 1.1);
+      ctx.scale(hot ? 1.65 : 1.25, hot ? 1.65 : 1.25);
       ctx.lineWidth = hot ? 1.5 : 1.2;
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
