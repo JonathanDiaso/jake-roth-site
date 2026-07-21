@@ -53,7 +53,7 @@ export function breakdown({ price, down, years }) {
   return { loan, principalInterest, taxes, insurance, total, totalInterest, rate };
 }
 
-export function initEngine(root) {
+export function initEngine(root, hooks = {}) {
   if (!root) return;
 
   const el = {
@@ -91,21 +91,21 @@ export function initEngine(root) {
 
   /* Cards are built once, then only their state class changes. Never
      re-render the list on input — that would thrash layout on drag. */
+  /* Ruled rows, not a grid of tiles. A price ladder IS a list — reading
+     it in order is the whole point, and twelve identical boxes hid that. */
   const cards = PLACES.map((place) => {
-    const card = document.createElement('article');
-    card.className = 'place glass';
-    /* h3: these sit directly under the section's h2. Jumping to h4
-       would skip a level and break screen-reader outline navigation. */
-    card.innerHTML = `
-      <h3 class="place__name"></h3>
-      <p class="place__price numeric"></p>
-      <p class="place__fact"></p>
-      <p class="place__status"></p>`;
-    card.querySelector('.place__name').textContent = place.name;
-    card.querySelector('.place__price').textContent = `Median about ${usd.format(place.median)}`;
-    card.querySelector('.place__fact').textContent = place.fact;
-    el.atlas?.appendChild(card);
-    return { place, card, status: card.querySelector('.place__status') };
+    const row = document.createElement('article');
+    row.className = 'prow';
+    row.innerHTML = `
+      <h3 class="prow__name"></h3>
+      <p class="prow__fact"></p>
+      <p class="prow__price numeric"></p>
+      <p class="prow__state"></p>`;
+    row.querySelector('.prow__name').textContent = place.name;
+    row.querySelector('.prow__fact').textContent = `${place.era} \u00b7 ${place.fact}`;
+    row.querySelector('.prow__price').textContent = usd.format(place.median);
+    el.atlas?.appendChild(row);
+    return { place, card: row, status: row.querySelector('.prow__state') };
   });
 
   const getYears = () => {
@@ -157,12 +157,14 @@ export function initEngine(root) {
     cards.forEach(({ place, card, status }) => {
       const inReach = place.median <= price;
       if (inReach) reachable++;
-      card.classList.toggle('place--reachable', inReach);
-      card.classList.toggle('place--stretch', !inReach);
+      card.classList.toggle('prow--in', inReach);
+      card.classList.toggle('prow--out', !inReach);
       status.textContent = inReach
-        ? 'Within reach at this number'
-        : `About ${usd.format(place.median - price)} above this number`;
+        ? 'In reach'
+        : `+${usd.format(place.median - price)}`;
     });
+
+    hooks.onReach?.(price);
 
     el.atlasCount.textContent = reachable === 0
       ? 'No area medians sit under this number yet — individual homes still will.'

@@ -68,6 +68,19 @@ def lift_black_point(img, base):
 
 
 def build_hero():
+    """Garden of the Gods. Kissing Camels formation with Pikes Peak behind —
+    the most recognisable frame in Colorado Springs, and the source of the
+    rock/pink colour bridge. Chosen over the wider Thunderbirds frame for the
+    hero because its upper-left sky is genuinely empty, which is where the
+    name has to live. The Thunderbirds frame moves to the closing section."""
+    im = Image.open(SRC / 'IMG_1683.jpeg').convert('RGB')
+    emit(im, 'gog', [2400, 1800, 1280, 900])
+    tr = 3 / 4
+    w = round(im.height * tr)
+    left = max(0, min(im.width - w, round(im.width * 0.52) - w // 2))
+    emit(im.crop((left, 0, left + w, im.height)), 'gog-portrait', [1000, 750, 560])
+    print(f'  gog         {im.size} -> landscape + {w}x{im.height} portrait crop')
+
     im = Image.open(SRC / 'IMG_2276.JPG').convert('RGB')
     # Landscape: the full frame. Sky occupies the top ~55%, which is the
     # typography zone; we do not crop into it.
@@ -94,6 +107,19 @@ def build_portrait():
     emit(lifted, 'portrait', [600, 450])
     print(f'  portrait    crop {box} -> {crop.width}x{crop.height}, '
           f'black point lifted to rgb{PAGE_BASE}')
+
+
+def build_avatar():
+    """Tight face crop for the persistent corner/rail avatar. Small render
+    size means the full torso portrait is unreadable here — this needs to be
+    face-only to register at 48px."""
+    im = Image.open(SRC / 'Headshot.jpg').convert('RGB')
+    box = (285, 205, 495, 415)          # square, centred on the face
+    face = lift_black_point(im.crop(box), PAGE_BASE)
+    for w in (160, 96):
+        face.resize((w, w), Image.LANCZOS).save(OUT / f'avatar-{w}.webp',
+                                                'WEBP', quality=86, method=6)
+    print(f'  avatar      face crop {box} -> 160/96 square')
 
 
 def build_scenery():
@@ -174,6 +200,7 @@ if __name__ == '__main__':
     build_ramsey()
     build_hero()
     build_portrait()
+    build_avatar()
     build_scenery()
     build_logo()
 

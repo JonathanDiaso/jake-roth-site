@@ -40,8 +40,9 @@ MIME = {'.webp': 'image/webp', '.jpg': 'image/jpeg',
 
 # One resolution per image. Chosen for a good balance of fidelity and weight.
 PICKS = {
-    'hero':           'hero-1280.webp',
-    'hero-portrait':  'hero-portrait-560.webp',
+    'gog':            'gog-1280.webp',
+    'gog-portrait':   'gog-portrait-560.webp',
+    'avatar':         'avatar-160.webp',
     'portrait':       'portrait-600.webp',
     'logo':           'logo-480.png',
     'ramsey-network': 'ramsey-network-560.webp',
@@ -90,14 +91,14 @@ def build_fonts() -> str:
 
 def build_css() -> str:
     parts = []
-    for name in ('tokens.css', 'base.css', 'sections.css', 'engine.css'):
+    for name in ('tokens.css', 'base.css', 'sections.css', 'engine.css', 'editorial.css'):
         parts.append(f'/* ---- {name} ---- */\n' + (SRC / 'styles' / name).read_text())
     return '\n'.join(parts)
 
 
 def build_js(assets: dict) -> str:
     """Concatenate modules in dependency order, stripping module syntax."""
-    order = ['content.js', 'terrain.js', 'motion.js', 'engine.js', 'main.js']
+    order = ['content.js', 'terrain.js', 'motion.js', 'atlas.js', 'engine.js', 'main.js']
     parts = []
     for name in order:
         code = (SRC / 'js' / name).read_text()
@@ -124,14 +125,14 @@ def build_html() -> str:
 
     # --- hero <picture>: collapse four widths to one landscape + one portrait ---
     html = re.sub(
-        r'<picture class="hero__media">.*?</picture>',
+        r'<picture class="hero__media"[^>]*>.*?</picture>',
         (
-            '<picture class="hero__media">\n'
-            f'      <source media="(max-width: 47.999rem)" srcset="{assets["hero-portrait"]}">\n'
-            f'      <img src="{assets["hero"]}" '
-            'alt="Four Air Force Thunderbirds flying in tight formation above a snow-covered '
-            'Pikes Peak, seen across the foothills from Colorado Springs." '
-            'fetchpriority="high" decoding="async" width="3896" height="2173">\n'
+            '<picture class="hero__media" data-hero-scrub>\n'
+            f'      <source media="(max-width: 47.999rem)" srcset="{assets["gog-portrait"]}">\n'
+            f'      <img src="{assets["gog"]}" '
+            'alt="The Kissing Camels rock formation at Garden of the Gods, with Pikes Peak '
+            'rising behind it, Colorado Springs." '
+            'fetchpriority="high" decoding="async" width="4032" height="3024">\n'
             '    </picture>'
         ),
         html, flags=re.S)

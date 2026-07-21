@@ -19,16 +19,17 @@
 <!-- Hero is the LCP element. Preloading it starts the fetch during head
      parse instead of waiting for layout to reach the <picture>. -->
 <link rel="preload" as="image" type="image/webp" fetchpriority="high"
-      imagesrcset="assets/hero-900.webp 900w, assets/hero-1280.webp 1280w, assets/hero-1800.webp 1800w, assets/hero-2400.webp 2400w"
+      imagesrcset="assets/gog-900.webp 900w, assets/gog-1280.webp 1280w, assets/gog-1800.webp 1800w, assets/gog-2400.webp 2400w"
       imagesizes="100vw" media="(min-width: 48rem)">
 <link rel="preload" as="image" type="image/webp" fetchpriority="high"
-      imagesrcset="assets/hero-portrait-560.webp 560w, assets/hero-portrait-750.webp 750w, assets/hero-portrait-1000.webp 1000w"
+      imagesrcset="assets/gog-portrait-560.webp 560w, assets/gog-portrait-750.webp 750w, assets/gog-portrait-1000.webp 1000w"
       imagesizes="100vw" media="(max-width: 47.999rem)">
 
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/sections.css">
 <link rel="stylesheet" href="styles/engine.css">
+<link rel="stylesheet" href="styles/editorial.css">
 </head>
 
 <body>
@@ -42,21 +43,21 @@
     <!-- Landscape frame keeps the full sky. Phones get a 3:4 crop that
          holds both the summit and the jets — a centre-crop of the wide
          frame would lose one or the other. -->
-    <picture class="hero__media">
+    <picture class="hero__media" data-hero-scrub>
       <source media="(max-width: 47.999rem)" type="image/webp"
-              srcset="assets/hero-portrait-560.webp 560w, assets/hero-portrait-750.webp 750w, assets/hero-portrait-1000.webp 1000w"
+              srcset="assets/gog-portrait-560.webp 560w, assets/gog-portrait-750.webp 750w, assets/gog-portrait-1000.webp 1000w"
               sizes="100vw">
       <source media="(max-width: 47.999rem)"
-              srcset="assets/hero-portrait-560.jpg 560w, assets/hero-portrait-750.jpg 750w, assets/hero-portrait-1000.jpg 1000w"
+              srcset="assets/gog-portrait-560.jpg 560w, assets/gog-portrait-750.jpg 750w, assets/gog-portrait-1000.jpg 1000w"
               sizes="100vw">
       <source type="image/webp"
-              srcset="assets/hero-900.webp 900w, assets/hero-1280.webp 1280w, assets/hero-1800.webp 1800w, assets/hero-2400.webp 2400w"
+              srcset="assets/gog-900.webp 900w, assets/gog-1280.webp 1280w, assets/gog-1800.webp 1800w, assets/gog-2400.webp 2400w"
               sizes="100vw">
-      <img src="assets/hero-1280.jpg"
-           srcset="assets/hero-900.jpg 900w, assets/hero-1280.jpg 1280w, assets/hero-1800.jpg 1800w, assets/hero-2400.jpg 2400w"
+      <img src="assets/gog-1280.jpg"
+           srcset="assets/gog-900.jpg 900w, assets/gog-1280.jpg 1280w, assets/gog-1800.jpg 1800w, assets/gog-2400.jpg 2400w"
            sizes="100vw"
-           alt="Four Air Force Thunderbirds flying in tight formation above a snow-covered Pikes Peak, seen across the foothills from Colorado Springs."
-           fetchpriority="high" decoding="async" width="3896" height="2173">
+           alt="The Kissing Camels rock formation at Garden of the Gods, with Pikes Peak rising behind it, Colorado Springs."
+           fetchpriority="high" decoding="async" width="4032" height="3024">
     </picture>
 
     <div class="hero__scrim" aria-hidden="true"></div>
@@ -186,11 +187,11 @@
       <div class="section-head">
         <p class="eyebrow">Two journeys</p>
         <h2 class="display display--lg" id="paths-title" data-reveal>
-          Tell me which side of the table you're on.
+          Two problems. Two plans. Never the same advice.
         </h2>
         <p class="body-text" data-reveal data-reveal-stagger="80">
-          Buying and selling are different problems. So the advice is different, and the
-          plan is different. Pick yours.
+          Most agents run one playbook and hope it fits. Buying is about not overpaying;
+          selling is about not leaving money on the table. Pick the one you are actually doing.
         </p>
       </div>
 
@@ -202,11 +203,11 @@
       </div>
 
       <div class="fork__panel" role="tabpanel" id="panel-buying" aria-labelledby="tab-buying" tabindex="0">
-        <div class="tracks" data-tracks="buying"></div>
+        <div class="rgrid" data-tracks="buying"></div>
       </div>
 
       <div class="fork__panel" role="tabpanel" id="panel-selling" aria-labelledby="tab-selling" tabindex="0" hidden>
-        <div class="tracks" data-tracks="selling"></div>
+        <div class="rgrid" data-tracks="selling"></div>
       </div>
     </div>
   </section>
@@ -218,11 +219,13 @@
       <div class="section-head">
         <p class="eyebrow">Run it yourself</p>
         <h2 class="display display--lg" id="engine-title" data-reveal>
-          What can you actually afford —<br><em>and where does that reach?</em>
+          Most calculators flatter you.<br><em>This one will not.</em>
         </h2>
         <p class="body-text" data-reveal data-reveal-stagger="80">
-          Built on the rule I'd hold you to anyway: a payment at or under 25% of your
-          monthly take-home, on a 15-year fixed. No email required to see the answer.
+          It runs Ramsey&rsquo;s actual rule &mdash; payment at or under 25% of monthly take-home
+          on a 15-year fixed &mdash; on the full payment, taxes and insurance included. The
+          number it gives you will probably be lower than you expected. That is the point,
+          and no email is required to see it.
         </p>
       </div>
 
@@ -318,15 +321,28 @@
         </div>
       </div>
 
-      <!-- ATLAS · the payoff -->
+      <!-- ATLAS · real geography, not decoration -->
       <div class="atlas">
         <div class="atlas__head">
           <div>
             <p class="eyebrow">Where that number reaches</p>
+            <p class="atlas__sub">Every point below sits at its true coordinates &mdash; including the
+              four installations, because &ldquo;how far is my base&rdquo; is the question I get most.</p>
           </div>
           <p class="atlas__count" data-out="atlas-count" role="status" aria-live="polite"></p>
         </div>
-        <div class="atlas__grid" data-atlas></div>
+
+        <div class="atlas__map">
+          <canvas data-atlas-map aria-hidden="true"></canvas>
+          <p class="atlas__legend">
+            <span class="lg lg--in">In reach</span>
+            <span class="lg lg--out">Above your number</span>
+            <span class="lg lg--base">Installation</span>
+            <span class="lg lg--peak">Pikes Peak</span>
+          </p>
+        </div>
+
+        <div class="plist" data-atlas></div>
       </div>
 
       <!-- THE ASK · inherits what they just did -->
@@ -349,6 +365,23 @@
     </div>
   </section>
 
+  <!-- ========== MARKET ========== -->
+  <section class="section section--tight bloom" style="--bloom-x:15%;--bloom-y:30%" aria-labelledby="market-title">
+    <div class="container container--wide">
+      <div class="section-head">
+        <p class="eyebrow">The market, plainly</p>
+        <h2 class="display display--md" id="market-title" data-reveal>
+          Numbers I would want if I were you.
+        </h2>
+      </div>
+      <div class="market" data-market></div>
+      <p class="meta" style="margin-top:var(--space-6)">
+        Source: <span data-market-source>&mdash;</span>. Updated <span data-market-date>&mdash;</span>.
+        These are countywide figures, not a valuation of your home &mdash; ask me for that.
+      </p>
+    </div>
+  </section>
+
   <!-- ========== STORY ========== -->
   <section class="section" id="about" aria-labelledby="story-title">
     <div class="container container--wide">
@@ -364,7 +397,11 @@
             Straight answers, and the math to back them.
           </h2>
           <div data-story-body data-reveal data-reveal-stagger="80"></div>
-          <p class="signature">Jake</p>
+          <div class="sigmark-wrap">
+            <p class="sigmark">Jake Roth</p>
+            <hr class="sigmark__rule">
+            <p class="sigmark__note">RamseyTrusted Certified ELP &middot; Pink Realty</p>
+          </div>
         </div>
       </div>
     </div>
@@ -374,7 +411,7 @@
   <section class="section section--tight" data-voices-section aria-labelledby="voices-title">
     <div class="container container--wide section-head">
       <p class="eyebrow">In their words</p>
-      <h2 class="display display--md" id="voices-title">Twelve five-star reviews. Their words, not mine.</h2>
+      <h2 class="display display--md" id="voices-title">Twelve five-star reviews. None of them written by me.</h2>
     </div>
     <div class="marquee">
       <div class="marquee__track" data-voices></div>
@@ -447,6 +484,33 @@
     </div>
   </div>
 </footer>
+
+<!-- Persistent side rail · desktop. Waits, never interrupts. -->
+<aside class="siderail" data-siderail>
+  <button class="siderail__tab" type="button" data-siderail-open aria-expanded="false" aria-controls="rail-panel">
+    <img class="siderail__avatar" src="assets/avatar-96.webp" alt="" width="96" height="96" decoding="async">
+    <span class="siderail__label">
+      <b>Talk to Jake</b>
+      <span data-rail-tab-eyebrow>Ramsey ELP</span>
+    </span>
+    <span class="siderail__dot" aria-hidden="true"></span>
+  </button>
+
+  <div class="siderail__panel" id="rail-panel" role="dialog" aria-modal="false" aria-labelledby="rail-title">
+    <button class="siderail__close" type="button" data-siderail-close aria-label="Close">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <p class="eyebrow" data-rail-eyebrow>Endorsed Local Provider</p>
+    <p class="siderail__title" id="rail-title" data-rail-title>Talk it through with Jake.</p>
+    <p class="siderail__body" data-rail-body></p>
+    <ul class="siderail__points" data-rail-points></ul>
+    <a class="btn btn--primary btn--block" data-tel data-press href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+      <span data-rail-cta>Call Jake now</span>
+    </a>
+    <p class="siderail__num" data-phone-display>(719) 631-2410</p>
+  </div>
+</aside>
 
 <!-- Sticky rail · mobile only, appears past the hero -->
 <div class="rail" data-rail>

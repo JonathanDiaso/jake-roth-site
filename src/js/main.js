@@ -2,12 +2,13 @@
    MAIN  ·  wiring only. No design decisions live here.
    ============================================================ */
 
-import { AGENT, PROOF, TRACKS, STORY, VOICES, ASSUMPTIONS, RAMSEY, BROKERAGE } from './content.js';
+import { AGENT, PROOF, TRACKS, STORY, VOICES, ASSUMPTIONS, RAMSEY, BROKERAGE, MARKET, RAIL } from './content.js';
 import { initTerrain } from './terrain.js';
 import { initEngine } from './engine.js';
+import { initAtlas } from './atlas.js';
 import {
   initReveal, initCounters, initParallax,
-  initMagnetic, initCardLight, initNameReveal, initRail, initPressBloom,
+  initMagnetic, initCardLight, initNameReveal, initRail, initPressBloom, initHeroScrub,
 } from './motion.js';
 
 /* Marks the document as JS-capable. Reveal styles are scoped to this
@@ -89,20 +90,19 @@ function renderTracks() {
     wrap.innerHTML = '';
     list.forEach((track, i) => {
       const card = document.createElement('article');
-      card.className = 'track glass glass--lit';
+      card.className = 'rcard';
       card.setAttribute('data-reveal', '');
       card.setAttribute('data-reveal-stagger', String(i * 80));
       card.innerHTML = `
-        <svg class="track__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="${ICONS[track.icon] || ICONS.shield}"/>
-        </svg>
-        <h3 class="track__title"></h3>
-        <p class="track__body"></p>
-        <ul class="track__list"></ul>`;
-      card.querySelector('.track__title').textContent = track.title;
-      card.querySelector('.track__body').textContent = track.body;
-      const ul = card.querySelector('.track__list');
+        <div class="rcard__head">
+          <span class="idx" aria-hidden="true">0${i + 1}</span>
+          <h3 class="rcard__title"></h3>
+        </div>
+        <p class="rcard__body"></p>
+        <ul class="rcard__list"></ul>`;
+      card.querySelector('.rcard__title').textContent = track.title;
+      card.querySelector('.rcard__body').textContent = track.body;
+      const ul = card.querySelector('.rcard__list');
       track.points.forEach((p) => {
         const li = document.createElement('li');
         li.textContent = p;
@@ -186,7 +186,7 @@ function renderVoices() {
   /* Duplicated once so the marquee loop is seamless at -50%. */
   [...VOICES, ...VOICES].forEach((v, i) => {
     const fig = document.createElement('figure');
-    fig.className = 'quote glass';
+    fig.className = 'qcard';
     if (i >= VOICES.length) fig.setAttribute('aria-hidden', 'true');
     fig.innerHTML =
       '<p class="stars" aria-label="Five out of five stars">' +
@@ -194,9 +194,9 @@ function renderVoices() {
       [0,12,24,36,48].map((x) =>
         `<path transform="translate(${x},0)" d="M6 0l1.8 3.7 4.1.6-3 2.9.7 4.1L6 9.4 2.4 11.3l.7-4.1-3-2.9 4.1-.6z"/>`
       ).join('') + '</svg></p>' +
-      '<blockquote class="quote__text"></blockquote><figcaption class="quote__who"></figcaption>';
-    fig.querySelector('.quote__text').textContent = `“${v.text}”`;
-    fig.querySelector('.quote__who').textContent = v.who;
+      '<blockquote class="qcard__text"></blockquote><figcaption class="qcard__who"></figcaption>';
+    fig.querySelector('.qcard__text').textContent = `\u201C${v.text}\u201D`;
+    fig.querySelector('.qcard__who').textContent = v.who;
     track.appendChild(fig);
   });
 }
@@ -211,9 +211,74 @@ function initHeroImage() {
   img.addEventListener('error', () => img.classList.add('is-loaded'), { once: true });
 }
 
+/* Owner-maintained, not a live feed — and the page says so rather than
+   implying a data connection that does not exist. Cells with no real
+   number yet are hidden instead of showing TODO to a visitor. */
+function renderMarket() {
+  const grid = $('[data-market]');
+  if (!grid) return;
+  const real = MARKET.rows.filter((r) => r.value && !String(r.value).startsWith('TODO'));
+  if (!real.length) { grid.closest('section')?.setAttribute('hidden', ''); return; }
+
+  grid.innerHTML = '';
+  real.forEach((row, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'market__cell';
+    cell.setAttribute('data-reveal', '');
+    cell.setAttribute('data-reveal-stagger', String(i * 70));
+    cell.innerHTML = '<p class="market__value"></p><p class="market__label"></p><p class="market__note"></p>';
+    cell.querySelector('.market__value').textContent = row.value;
+    cell.querySelector('.market__label').textContent = row.label;
+    cell.querySelector('.market__note').textContent = row.note;
+    grid.appendChild(cell);
+  });
+  $$('[data-market-source]').forEach((n) => { n.textContent = MARKET.source; });
+  $$('[data-market-date]').forEach((n) => { n.textContent = MARKET.asOf; });
+}
+
+function renderRail() {
+  $$('[data-rail-eyebrow]').forEach((n) => { n.textContent = RAIL.eyebrow; });
+  $$('[data-rail-tab-eyebrow]').forEach((n) => { n.textContent = RAIL.tabEyebrow; });
+  const title = $('[data-rail-title]'); if (title) title.textContent = RAIL.title;
+  const body = $('[data-rail-body]'); if (body) body.textContent = RAIL.body;
+  const cta = $('[data-rail-cta]'); if (cta) cta.textContent = RAIL.cta;
+  const pts = $('[data-rail-points]');
+  if (pts) {
+    pts.innerHTML = '';
+    RAIL.points.forEach((p) => {
+      const li = document.createElement('li');
+      li.textContent = p;
+      pts.appendChild(li);
+    });
+  }
+
+  const rail = $('[data-siderail]');
+  const open = $('[data-siderail-open]');
+  const close = $('[data-siderail-close]');
+  if (!rail || !open || !close) return;
+
+  const setOpen = (on) => {
+    rail.classList.toggle('is-open', on);
+    open.setAttribute('aria-expanded', String(on));
+    if (on) close.focus(); else open.focus();
+  };
+  open.addEventListener('click', () => setOpen(true));
+  close.addEventListener('click', () => setOpen(false));
+  /* Escape closes it, and a click anywhere outside dismisses it — a panel
+     that can only be closed by one small button is a trap. */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && rail.classList.contains('is-open')) setOpen(false);
+  });
+  document.addEventListener('pointerdown', (e) => {
+    if (rail.classList.contains('is-open') && !rail.contains(e.target)) setOpen(false);
+  });
+}
+
 function boot() {
   initHeroImage();
   wireContact();
+  renderMarket();
+  renderRail();
   renderProof();
   renderTracks();
   renderStory();
@@ -223,7 +288,13 @@ function boot() {
   const canvas = $('[data-terrain]');
   if (canvas) initTerrain(canvas);
 
-  initEngine($('[data-engine]'));
+  /* The map and the price ladder read from one source of truth: the
+     engine pushes its result out, the map re-lights. */
+  const mapCanvas = $('[data-atlas-map]');
+  const atlas = mapCanvas ? initAtlas(mapCanvas) : null;
+  initEngine($('[data-engine]'), { onReach: (price) => atlas?.setReach(price) });
+
+  initHeroScrub($('[data-hero-scrub]'), $('.hero__copy'));
   initNameReveal($('[data-name-reveal]'));
   initPressBloom();
   initReveal();
