@@ -2339,6 +2339,174 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   .hero__whois .eyebrow::before { display: block; }
 }
 
+/* ============================================================
+   MOBILE DENSITY PASS
+   The page measured 13 screens tall on a 390px phone. Most of that was
+   not content — it was desktop rhythm applied to a phone, where the
+   same air that reads as confidence on a 27" display reads as an empty
+   scroll. Vertical space is compressed on small screens only; the
+   desktop composition is untouched.
+   ============================================================ */
+
+@media (max-width: 47.999rem) {
+  :root {
+    --section-gap-sm: 2rem;
+    --section-gap-md: 2.5rem;
+    --section-gap-lg: 3rem;
+    --section-gap-xl: 3.5rem;
+  }
+
+  /* The hero used space-between, which on a short viewport pushed a hole
+     between the copy and the doors. Stack it and let the gap be a value. */
+  .hero__inner {
+    justify-content: flex-end;
+    gap: var(--space-8);
+    padding-block: 6.5rem var(--space-8);
+  }
+
+  .section-head { margin-bottom: var(--space-8); }
+  .credentials { padding-block: var(--space-12); }
+  .credentials__grid { gap: var(--space-8); }
+  .ramsey-plate { width: 11rem; }
+  .marks { gap: var(--space-6); align-items: center; }
+  .marks__shield { width: 6.5rem; }
+
+  .rcard { padding-block: var(--space-5) var(--space-6); }
+  .rgrid { gap: var(--space-2); }
+  .engine__more { gap: var(--space-8); }
+  .ask1 { padding-block: var(--space-4) 0; gap: var(--space-4); }
+  .atlas { margin-top: var(--space-10, 2.5rem); }
+  .atlas__map canvas { height: 15rem; }
+  .atlas__split { gap: var(--space-6); }
+  .footer { padding-block: var(--section-gap-lg) var(--space-8); }
+}
+
+/* The arrival ribbon wrapped to three lines on a phone. The second line
+   is orientation, not information — it can go. */
+@media (max-width: 33rem) {
+  .arrival__text span { display: none; }
+  .arrival__text strong { font-size: var(--text-sm); }
+  .arrival { padding-block: var(--space-2); }
+}
+
+/* ============================================================
+   THE PRICE LADDER, TRUNCATED
+   Twelve rows is a full screen of scrolling on a phone for information
+   most visitors do not need — what matters is what they CAN reach and
+   the first few they cannot. The rest stays one tap away.
+   ============================================================ */
+
+.plist { position: relative; }
+.plist__more {
+  display: none;
+  width: 100%;
+  min-height: 3rem;
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border: 0;
+  border-top: 1px solid var(--color-line-subtle);
+  background: none;
+  color: var(--color-brand-pink-glow);
+  font: inherit;
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+}
+.plist__more:hover { color: var(--color-ink-900); }
+
+@media (max-width: 63.999rem) {
+  .plist__more { display: block; }
+  .plist:not(.is-expanded) .prow--hidden { display: none; }
+}
+
+/* ============================================================
+   VOICES  ·  the reviews section, given a spine
+   It was a heading over a drifting row of quotes — no anchor, no reason
+   to stop. The 5.0 average is the actual headline; the quotes are the
+   evidence. So the score gets the weight and the marquee becomes
+   supporting material.
+   ============================================================ */
+
+.voices__head {
+  display: grid;
+  gap: var(--space-8);
+  align-items: end;
+  padding-bottom: var(--space-10, 2.5rem);
+  border-bottom: 1px solid var(--color-line-subtle);
+  margin-bottom: var(--section-gap-sm);
+}
+@media (min-width: 56rem) {
+  .voices__head { grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-16); }
+}
+
+.voices__score { display: grid; gap: var(--space-2); justify-items: start; }
+@media (min-width: 56rem) { .voices__score { justify-items: end; text-align: right; } }
+
+.voices__num {
+  font-family: var(--font-display);
+  font-size: var(--text-6xl);
+  line-height: 0.85;
+  color: var(--color-ink-900);
+}
+.voices__stars svg { width: 7rem; height: auto; fill: var(--color-accent-warm); }
+.voices__meta { font-size: var(--text-sm); color: var(--color-ink-300); max-width: 24ch; }
+
+/* The marquee runs full-bleed so it reads as a continuous band rather
+   than a widget sitting inside a container. */
+.voices .marquee { margin-inline: calc(var(--gutter) * -1); }
+.voices .marquee__track { gap: 0; }
+.qcard { padding-inline: var(--space-8); border-inline-end: 1px solid var(--color-line-subtle); }
+.qcard:first-child { padding-inline-start: var(--gutter); }
+
+/* --- Credentials kicker ------------------------------------- */
+.credentials__kicker {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-brand-pink-glow);
+  margin-bottom: var(--space-4);
+}
+
+/* --- Market punchline --------------------------------------- */
+.market__punchline {
+  margin-top: var(--space-8);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-snug);
+  color: var(--color-ink-700);
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+.market__src { margin-top: var(--space-4); }
+
+@media (max-width: 47.999rem) {
+  /* Four stacked stat cells is a whole screen for four short numbers.
+     Two-up reads faster and costs half the scroll. */
+  .market { grid-template-columns: 1fr 1fr; border-inline-start: 1px solid var(--color-line-subtle); }
+  .market__cell {
+    padding: var(--space-4);
+    border-inline-end: 1px solid var(--color-line-subtle);
+    border-bottom: 1px solid var(--color-line-subtle);
+  }
+  .market__value { font-size: var(--text-2xl); }
+  .market__label { margin-top: var(--space-2); font-size: var(--text-xs); }
+  .market__note { display: none; }
+  .market__punchline { font-size: var(--text-xl); margin-top: var(--space-6); }
+
+  /* Credentials: the marks sit in a row rather than a stack, so the
+     band stops being a full screen of logos. */
+  .credentials__grid { gap: var(--space-6); }
+  .marks { flex-wrap: nowrap; align-items: center; gap: var(--space-4); }
+  .ramsey-plate { width: 9rem; }
+  .marks__brand { gap: var(--space-3); }
+  .marks__shield { width: 5rem; }
+  .marks__logo { width: 9.5rem; }
+  .marks__claim { font-size: 0.6875rem; }
+  .credentials__statement { font-size: var(--text-2xl); }
+}
+
 </style>
 
 <a class="skip-link" href="#main">Skip to content</a>
@@ -2422,6 +2590,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
     <div class="container container--wide">
       <div class="credentials__grid">
         <div class="credentials__copy">
+          <p class="credentials__kicker">Why you were sent here</p>
                     <h2 class="credentials__statement" id="cred-title" data-reveal>
             Ramsey does not hand this out. You have to keep earning it.
           </h2>
@@ -2638,6 +2807,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
             </p>
           </div>
           <div class="plist" data-atlas></div>
+          <button class="plist__more" type="button" data-atlas-more hidden></button>
         </div>
       </div>
 
@@ -2667,13 +2837,14 @@ html:not(.js-on) .hero__media img { opacity: 1; }
       <div class="section-head">
         <p class="eyebrow">The market, plainly</p>
         <h2 class="display display--md" id="market-title" data-reveal>
-          Numbers I would want if I were you.
+          What the market is actually doing.
         </h2>
       </div>
       <div class="market" data-market></div>
-      <p class="meta" style="margin-top:var(--space-6)">
-        Source: <span data-market-source>&mdash;</span>. Updated <span data-market-date>&mdash;</span>.
-        These are countywide figures, not a valuation of your home &mdash; ask me for that.
+      <p class="market__punchline" data-market-punchline></p>
+      <p class="meta market__src">
+        <span data-market-source>&mdash;</span> &middot; <span data-market-date>&mdash;</span>.
+        Area figures, not a valuation of your home &mdash; ask me for that.
       </p>
     </div>
   </section>
@@ -3042,14 +3213,22 @@ const LANDMARKS = [
    A stale "live" number is worse than no number. There is no feed behind
    this; it is owner-maintained on purpose, and the page says so. */
 const MARKET = {
-  asOf: 'TODO_MONTH_YEAR',
-  source: 'Pikes Peak REALTOR\u00AE Services Corp.',
+  /* Real figures, sourced and dated. Owner-maintained on purpose: there
+     is no feed behind this and the page says so, because a stale number
+     presented as live is worse than no number.
+     ⚠️ Jake — refresh monthly against the PPAR report and move `asOf`. */
+  asOf: 'June 2026',
+  source: 'Redfin and Zillow market data, El Paso County',
   rows: [
-    { label: 'Median sale price',   value: 'TODO', note: 'El Paso County, all residential' },
-    { label: 'Median days on market', value: 'TODO', note: 'Listing to contract' },
-    { label: 'Months of inventory', value: 'TODO', note: 'Under 4 favours sellers' },
-    { label: 'Percent of list received', value: 'TODO', note: 'Countywide average' },
+    { label: 'Median sale price', value: '$500K', note: 'Colorado Springs, June 2026' },
+    { label: 'Median days on market', value: '45', note: 'Listing to contract' },
+    { label: 'Months of inventory', value: '2.7', note: 'Under 4 favours sellers' },
+    { label: 'The 25% rule reaches', value: '$314K', note: 'At $9,000 take-home, 15-year fixed' },
   ],
+  /* The fourth row is computed from the engine's own assumptions, not
+     from market data — it is the honest punchline: the disciplined
+     number sits well under the median, which is the whole conversation. */
+  punchline: 'The median home costs about 59% more than the 25% rule reaches at a $9,000 monthly take-home. That gap is the conversation worth having before you shop, not after.',
 };
 
 /* Persistent side rail. ELP-appropriate: the Ramsey audience responds to
@@ -4023,6 +4202,7 @@ function initEngine(root, hooks = {}) {
     totalRow: root.querySelector('[data-out="total"]'),
     compare: root.querySelector('[data-out="compare"]'),
     atlas: root.querySelector('[data-atlas]'),
+    more: root.querySelector('[data-atlas-more]'),
     atlasCount: root.querySelector('[data-out="atlas-count"]'),
     ask: root.querySelector('[data-out="ask"]'),
     askLink: root.querySelector('[data-out="ask-link"]'),
@@ -4148,6 +4328,23 @@ function initEngine(root, hooks = {}) {
 
     hooks.onReach?.(price);
 
+    /* On narrow screens keep the rows that carry the answer — everything
+       in reach, plus the next three above it — and fold the rest behind
+       a toggle rather than making the visitor scroll past nine rows of
+       "no". Desktop always shows all twelve. */
+    let shownBeyond = 0;
+    cards.forEach(({ place, card }) => {
+      const inReach = place.median <= price;
+      const keep = inReach || shownBeyond < 3;
+      if (!inReach) shownBeyond++;
+      card.classList.toggle('prow--hidden', !keep);
+    });
+    if (el.more) {
+      const hidden = cards.filter((c) => c.card.classList.contains('prow--hidden')).length;
+      el.more.hidden = hidden === 0;
+      el.more.textContent = `Show ${hidden} more area${hidden === 1 ? '' : 's'}`;
+    }
+
     el.atlasCount.textContent = reachable === 0
       ? 'No area medians sit under this number yet — individual homes still will.'
       : `${reachable} of ${cards.length} area medians sit at or under this number`;
@@ -4168,6 +4365,10 @@ function initEngine(root, hooks = {}) {
   el.down.addEventListener('input', update);
   el.terms.forEach((t) => t.addEventListener('change', update));
   el.share?.addEventListener('input', update);
+  el.more?.addEventListener('click', () => {
+    el.atlas.classList.add('is-expanded');
+    el.more.hidden = true;
+  });
 
   update();
 }
@@ -4402,6 +4603,8 @@ function renderMarket() {
     cell.querySelector('.market__note').textContent = row.note;
     grid.appendChild(cell);
   });
+  const pl = $('[data-market-punchline]');
+  if (pl && MARKET.punchline) pl.textContent = MARKET.punchline;
   $$('[data-market-source]').forEach((n) => { n.textContent = MARKET.source; });
   $$('[data-market-date]').forEach((n) => { n.textContent = MARKET.asOf; });
 }

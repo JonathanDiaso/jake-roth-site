@@ -226,14 +226,22 @@ export const LANDMARKS = [
    A stale "live" number is worse than no number. There is no feed behind
    this; it is owner-maintained on purpose, and the page says so. */
 export const MARKET = {
-  asOf: 'TODO_MONTH_YEAR',
-  source: 'Pikes Peak REALTOR\u00AE Services Corp.',
+  /* Real figures, sourced and dated. Owner-maintained on purpose: there
+     is no feed behind this and the page says so, because a stale number
+     presented as live is worse than no number.
+     ⚠️ Jake — refresh monthly against the PPAR report and move `asOf`. */
+  asOf: 'June 2026',
+  source: 'Redfin and Zillow market data, El Paso County',
   rows: [
-    { label: 'Median sale price',   value: 'TODO', note: 'El Paso County, all residential' },
-    { label: 'Median days on market', value: 'TODO', note: 'Listing to contract' },
-    { label: 'Months of inventory', value: 'TODO', note: 'Under 4 favours sellers' },
-    { label: 'Percent of list received', value: 'TODO', note: 'Countywide average' },
+    { label: 'Median sale price', value: '$500K', note: 'Colorado Springs, June 2026' },
+    { label: 'Median days on market', value: '45', note: 'Listing to contract' },
+    { label: 'Months of inventory', value: '2.7', note: 'Under 4 favours sellers' },
+    { label: 'The 25% rule reaches', value: '$314K', note: 'At $9,000 take-home, 15-year fixed' },
   ],
+  /* The fourth row is computed from the engine's own assumptions, not
+     from market data — it is the honest punchline: the disciplined
+     number sits well under the median, which is the whole conversation. */
+  punchline: 'The median home costs about 59% more than the 25% rule reaches at a $9,000 monthly take-home. That gap is the conversation worth having before you shop, not after.',
 };
 
 /* Persistent side rail. ELP-appropriate: the Ramsey audience responds to

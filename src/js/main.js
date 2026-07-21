@@ -232,6 +232,8 @@ function renderMarket() {
     cell.querySelector('.market__note').textContent = row.note;
     grid.appendChild(cell);
   });
+  const pl = $('[data-market-punchline]');
+  if (pl && MARKET.punchline) pl.textContent = MARKET.punchline;
   $$('[data-market-source]').forEach((n) => { n.textContent = MARKET.source; });
   $$('[data-market-date]').forEach((n) => { n.textContent = MARKET.asOf; });
 }
