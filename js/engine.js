@@ -75,6 +75,7 @@ export function initEngine(root, hooks = {}) {
     totalRow: root.querySelector('[data-out="total"]'),
     compare: root.querySelector('[data-out="compare"]'),
     atlas: root.querySelector('[data-atlas]'),
+    more: root.querySelector('[data-atlas-more]'),
     atlasCount: root.querySelector('[data-out="atlas-count"]'),
     ask: root.querySelector('[data-out="ask"]'),
     askLink: root.querySelector('[data-out="ask-link"]'),
@@ -200,6 +201,23 @@ export function initEngine(root, hooks = {}) {
 
     hooks.onReach?.(price);
 
+    /* On narrow screens keep the rows that carry the answer — everything
+       in reach, plus the next three above it — and fold the rest behind
+       a toggle rather than making the visitor scroll past nine rows of
+       "no". Desktop always shows all twelve. */
+    let shownBeyond = 0;
+    cards.forEach(({ place, card }) => {
+      const inReach = place.median <= price;
+      const keep = inReach || shownBeyond < 3;
+      if (!inReach) shownBeyond++;
+      card.classList.toggle('prow--hidden', !keep);
+    });
+    if (el.more) {
+      const hidden = cards.filter((c) => c.card.classList.contains('prow--hidden')).length;
+      el.more.hidden = hidden === 0;
+      el.more.textContent = `Show ${hidden} more area${hidden === 1 ? '' : 's'}`;
+    }
+
     el.atlasCount.textContent = reachable === 0
       ? 'No area medians sit under this number yet — individual homes still will.'
       : `${reachable} of ${cards.length} area medians sit at or under this number`;
@@ -220,6 +238,10 @@ export function initEngine(root, hooks = {}) {
   el.down.addEventListener('input', update);
   el.terms.forEach((t) => t.addEventListener('change', update));
   el.share?.addEventListener('input', update);
+  el.more?.addEventListener('click', () => {
+    el.atlas.classList.add('is-expanded');
+    el.more.hidden = true;
+  });
 
   update();
 }

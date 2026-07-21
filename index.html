@@ -126,6 +126,7 @@
     <div class="container container--wide">
       <div class="credentials__grid">
         <div class="credentials__copy">
+          <p class="credentials__kicker">Why you were sent here</p>
                     <h2 class="credentials__statement" id="cred-title" data-reveal>
             Ramsey does not hand this out. You have to keep earning it.
           </h2>
@@ -350,6 +351,7 @@
             </p>
           </div>
           <div class="plist" data-atlas></div>
+          <button class="plist__more" type="button" data-atlas-more hidden></button>
         </div>
       </div>
 
@@ -379,13 +381,14 @@
       <div class="section-head">
         <p class="eyebrow">The market, plainly</p>
         <h2 class="display display--md" id="market-title" data-reveal>
-          Numbers I would want if I were you.
+          What the market is actually doing.
         </h2>
       </div>
       <div class="market" data-market></div>
-      <p class="meta" style="margin-top:var(--space-6)">
-        Source: <span data-market-source>&mdash;</span>. Updated <span data-market-date>&mdash;</span>.
-        These are countywide figures, not a valuation of your home &mdash; ask me for that.
+      <p class="market__punchline" data-market-punchline></p>
+      <p class="meta market__src">
+        <span data-market-source>&mdash;</span> &middot; <span data-market-date>&mdash;</span>.
+        Area figures, not a valuation of your home &mdash; ask me for that.
       </p>
     </div>
   </section>
