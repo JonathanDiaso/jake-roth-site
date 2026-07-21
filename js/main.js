@@ -291,8 +291,33 @@ function boot() {
   /* The map and the price ladder read from one source of truth: the
      engine pushes its result out, the map re-lights. */
   const mapCanvas = $('[data-atlas-map]');
-  const atlas = mapCanvas ? initAtlas(mapCanvas) : null;
+  const rows = () => $$('[data-atlas] .prow');
+  const atlas = mapCanvas ? initAtlas(mapCanvas, {
+    onHover: (i) => rows().forEach((r, n) => r.classList.toggle('is-hot', n === i)),
+  }) : null;
   initEngine($('[data-engine]'), { onReach: (price) => atlas?.setReach(price) });
+
+  /* The Atlas is created inside the engine's collapsed panel, so it has no
+     box to measure until the panel opens. Tell it the moment that happens
+     — after the grid transition has actually laid out. */
+  $('[data-engine-reveal]')?.addEventListener('click', () => {
+    requestAnimationFrame(() => atlas?.resize());
+    setTimeout(() => atlas?.resize(), 900);
+  });
+
+  /* Hovering a row lights its point on the map, and vice versa. The two
+     views are one thing, so they have to move together. */
+  $('[data-atlas]')?.addEventListener('pointerover', (e) => {
+    const row = e.target.closest('.prow');
+    if (!row) return;
+    const i = rows().indexOf(row);
+    rows().forEach((r, n) => r.classList.toggle('is-hot', n === i));
+    atlas?.setHover(i);
+  });
+  $('[data-atlas]')?.addEventListener('pointerleave', () => {
+    rows().forEach((r) => r.classList.remove('is-hot'));
+    atlas?.setHover(null);
+  });
 
   initHeroScrub($('[data-hero-scrub]'), $('.hero__copy'));
   initNameReveal($('[data-name-reveal]'));
