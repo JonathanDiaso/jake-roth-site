@@ -29,8 +29,8 @@ function paymentFactor(annualRate, years) {
    Rearranged for price. Taxes and insurance scale with the home's
    value, which is why they belong inside the solve rather than being
    subtracted afterwards as a flat guess. */
-export function maxPrice({ takeHome, down, years }) {
-  const budget = takeHome * ASSUMPTIONS.ramseyRule;
+export function maxPrice({ takeHome, down, years, share = ASSUMPTIONS.ramseyRule }) {
+  const budget = takeHome * share;
   const rate = years === 15 ? ASSUMPTIONS.rate15 : ASSUMPTIONS.rate30;
   const f = paymentFactor(rate, years);
   const carry = (ASSUMPTIONS.propertyTaxRate + ASSUMPTIONS.insuranceRate) / 12;
@@ -62,9 +62,13 @@ export function initEngine(root, hooks = {}) {
     down: root.querySelector('#down-payment'),
     downOut: root.querySelector('[data-out="down"]'),
     terms: root.querySelectorAll('input[name="term"]'),
+    share: root.querySelector('#share'),
+    shareOut: root.querySelectorAll('[data-out="share-pct"]'),
+    shareNote: root.querySelector('[data-out="share-note"]'),
+    stage: root,
+    reveal: root.querySelector('[data-engine-reveal]'),
     price: root.querySelector('[data-out="price"]'),
     payment: root.querySelector('[data-out="payment"]'),
-    share: root.querySelector('[data-out="share"]'),
     pi: root.querySelector('[data-out="pi"]'),
     tax: root.querySelector('[data-out="tax"]'),
     ins: root.querySelector('[data-out="ins"]'),
@@ -88,6 +92,21 @@ export function initEngine(root, hooks = {}) {
   };
   applyBounds(el.takeHome, ASSUMPTIONS.takeHome);
   applyBounds(el.down, ASSUMPTIONS.down);
+  if (el.share) {
+    const c = ASSUMPTIONS.share;
+    el.share.min = String(c.min * 100); el.share.max = String(c.max * 100);
+    el.share.step = String(c.step * 100); el.share.value = String(c.default * 100);
+  }
+
+  /* Progressive disclosure: one question, then everything. Opening on a
+     wall of sliders is what makes a calculator feel like paperwork. */
+  if (el.reveal) {
+    el.reveal.addEventListener('click', () => {
+      root.classList.add('is-open');
+      el.reveal.setAttribute('aria-expanded', 'true');
+      root.querySelector('[data-out="price"]')?.focus?.();
+    }, { once: true });
+  }
 
   /* Cards are built once, then only their state class changes. Never
      re-render the list on input — that would thrash layout on drag. */
@@ -122,19 +141,34 @@ export function initEngine(root, hooks = {}) {
     const takeHome = Number(el.takeHome.value);
     const down = Number(el.down.value);
     const years = getYears();
+    const share = el.share ? Number(el.share.value) / 100 : ASSUMPTIONS.ramseyRule;
 
     setRangeFill(el.takeHome);
     setRangeFill(el.down);
+    if (el.share) setRangeFill(el.share);
+
+    const overRule = share > ASSUMPTIONS.ramseyRule + 0.0001;
+    root.classList.toggle('is-over-rule', overRule);
+    el.shareOut?.forEach((n) => { n.textContent = `${Math.round(share * 100)}%`; });
+    if (el.shareNote) {
+      const atRule = maxPrice({ takeHome, down, years, share: ASSUMPTIONS.ramseyRule });
+      const gap = Math.round(takeHome * (share - ASSUMPTIONS.ramseyRule));
+      el.shareNote.textContent = overRule
+        ? `That is ${usd.format(gap)} a month past the 25% line \u2014 ${usd.format(maxPrice({ takeHome, down, years, share }) - atRule)} more house, paid for out of everything else you do.`
+        : share < ASSUMPTIONS.ramseyRule
+          ? 'Below the line. More room left over every month.'
+          : 'On the line Ramsey teaches, and the one I would hold you to.';
+    }
 
     el.takeHomeOut.textContent = takeHome.toLocaleString('en-US');
     el.downOut.textContent = down.toLocaleString('en-US');
 
-    const price = maxPrice({ takeHome, down, years });
+    const price = maxPrice({ takeHome, down, years, share });
     const b = breakdown({ price, down, years });
 
     el.price.textContent = usd.format(price);
     el.payment.textContent = usd.format(b.total);
-    el.share.textContent = `${Math.round((b.total / takeHome) * 100)}%`;
+
     el.pi.textContent = usd.format(b.principalInterest);
     el.tax.textContent = usd.format(b.taxes);
     el.ins.textContent = usd.format(b.insurance);
@@ -144,7 +178,7 @@ export function initEngine(root, hooks = {}) {
        buys more house and costs dramatically more money — show both
        numbers rather than editorialising about either. */
     const other = years === 15 ? 30 : 15;
-    const otherPrice = maxPrice({ takeHome, down, years: other });
+    const otherPrice = maxPrice({ takeHome, down, years: other, share });
     const otherB = breakdown({ price: otherPrice, down, years: other });
     const interestGap = Math.abs(otherB.totalInterest - b.totalInterest);
 
@@ -185,6 +219,7 @@ export function initEngine(root, hooks = {}) {
   el.takeHome.addEventListener('input', update);
   el.down.addEventListener('input', update);
   el.terms.forEach((t) => t.addEventListener('change', update));
+  el.share?.addEventListener('input', update);
 
   update();
 }

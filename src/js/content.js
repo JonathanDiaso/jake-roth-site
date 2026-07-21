@@ -168,7 +168,12 @@ export const ARRIVAL = {
 
 export const ASSUMPTIONS = {
   updated: 'TODO_DATE',                   // TODO — shown on page; keep current
-  ramseyRule: 0.25,                       // payment ≤ 25% of monthly take-home
+  ramseyRule: 0.25,                       // the Ramsey line, marked on the track
+  /* The share is adjustable, but 25% stays the default and the track is
+     marked there. Above it the figure turns amber and says what the
+     stretch costs — the tool bends without ever quietly abandoning the
+     rule Jake is endorsed for. */
+  share: { min: 0.15, max: 0.40, step: 0.01, default: 0.25 },
   rate15: 0.059,                          // TODO — verify current 15-yr fixed
   rate30: 0.066,                          // TODO — verify current 30-yr fixed
   propertyTaxRate: 0.0049,                // TODO — verify El Paso County effective rate

@@ -57,11 +57,15 @@
   --color-brand-pink-glow: #FF4FA8;  /* 6.6:1 on base — the only pink safe for small text */
   --color-brand-pink-wash: rgba(224, 19, 132, 0.14);
 
-  /* --- COLOR · RAMSEY --------------------------------------
-     PROVISIONAL. Must be sampled from the official badge asset,
-     never invented. The badge itself is never recolored. */
-  --color-ramsey-navy:      #0E2A47;
-  --color-ramsey-navy-lift: #16385C;
+  /* --- COLOR · CREDENTIALS FIELD ---------------------------
+     Was Ramsey navy. Removed: the navy band existed as a "room" for a
+     navy badge, but the supplied shield ships with its own alpha and the
+     network graphic's own ground is near-black wood. The room was built
+     for a problem that no longer exists, and it put the page's only cold
+     colour next to its warmest asset. Black and pink throughout now.
+     The Ramsey assets themselves are still never recoloured. */
+  --color-credentials:      #100C10;
+  --color-credentials-lift: #1B1219;
 
   /* --- COLOR · THE ROCK BRIDGE -----------------------------
      Sampled directly out of Jake's own Garden of the Gods photograph
@@ -95,9 +99,12 @@
   --color-state-error:   #FF6B6B;
 
   /* --- COLOR · FOCUS ---------------------------------------
-     Deliberately NOT pink. A focus ring must never be confusable
-     with a brand accent, or keyboard users lose their place. */
-  --color-focus: #7FD4FF;
+     Still deliberately not pink — a focus ring that matches the brand
+     accent leaves keyboard users unable to find themselves. But cyan was
+     a stock a11y default and the only cold colour left on the page.
+     Warm white reads as unmistakably "system", clears 12:1 on every
+     surface here, and belongs to the palette. */
+  --color-focus: #FFE9C7;
 
   /* --- TYPE · FAMILIES -------------------------------------
      Two families, four weights. Perf budget: 02_MOTION.md
@@ -838,9 +845,10 @@ html:not(.js-on) .hero__media img { opacity: 1; }
 .credentials {
   position: relative;
   background:
-    radial-gradient(60rem 30rem at 50% 0%, var(--color-ramsey-navy-lift), transparent 70%),
-    var(--color-ramsey-navy);
-  border-block: 1px solid rgba(255, 255, 255, 0.09);
+    radial-gradient(56rem 30rem at 26% 0%, var(--color-brand-pink-wash), transparent 68%),
+    radial-gradient(40rem 24rem at 82% 100%, var(--color-ember-wash), transparent 70%),
+    var(--color-credentials);
+  border-block: 1px solid var(--color-line-subtle);
   padding-block: var(--section-gap-md);
   z-index: var(--z-content);
 }
@@ -908,7 +916,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
 }
 .wordmark span { color: var(--color-brand-pink-glow); }
 
-.credentials .meta { color: rgba(255, 255, 255, 0.66); }
+.credentials .meta { color: var(--color-ink-500); }
 
 /* ------------------------------------------------------------
    PROOF  ·  numeric counters, 02_MOTION.md §6
@@ -1334,7 +1342,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--color-brand-pink-glow);
 }
 .marks__logo { width: clamp(11rem, 24vw, 16rem); height: auto; }
 
@@ -1863,10 +1871,13 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   content: '';
   position: absolute;
   inset-block: 0;
-  inset-inline-start: calc(var(--gutter) * -1);
+  /* Sits ON the row's own edge. A negative gutter offset put this bar
+     outside the list entirely and painted it over the map beside it. */
+  inset-inline-start: 0;
   width: 2px;
   background: linear-gradient(to bottom, transparent, var(--color-brand-pink), transparent);
 }
+.prow { padding-inline-start: var(--space-4); }
 .prow--out { opacity: 0.5; }
 
 /* --- Quote · rule-based, no box ----------------------------- */
@@ -2105,6 +2116,189 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   text-align: center;
 }
 
+/* ============================================================
+   HERO PORTRAIT  ·  the face, in the first screen
+   A Ramsey referral is checking out a person. Show them the person.
+   The headshot was shot on #000004 and its black point is lifted to
+   the page ground in the asset pipeline, so it has no edge to hide —
+   the mask below only softens where it meets the photograph behind.
+   ============================================================ */
+
+.hero__inner { position: relative; }
+
+.hero__portrait { margin: 0; display: none; }
+@media (min-width: 64rem) {
+  .hero__portrait {
+    display: block;
+    position: absolute;
+    inset-inline-end: var(--gutter);
+    inset-block-start: clamp(4rem, 12vh, 7rem);
+    width: clamp(15rem, 21vw, 19rem);
+    line-height: 0;
+  }
+  .hero__portrait img {
+    width: 100%; height: auto;
+    /* The portrait is a near-black frame laid over a bright sky. Without
+       a ground behind it the subject simply disappears. */
+    filter: contrast(1.06) brightness(1.12);
+    /* The mask has to finish INSIDE the element or the photo's rectangle
+       edge stays visible — at 120% the corners never reach transparent,
+       which is exactly the pasted-on-box look this is meant to avoid. */
+    -webkit-mask-image:
+      radial-gradient(66% 60% at 50% 40%, #000 42%, transparent 80%),
+      linear-gradient(to bottom, #000 55%, transparent 92%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      radial-gradient(66% 60% at 50% 40%, #000 42%, transparent 80%),
+      linear-gradient(to bottom, #000 55%, transparent 92%);
+    mask-composite: intersect;
+  }
+  /* A pink rim behind him separates the portrait from the rock face
+     without putting a box around it. */
+  .hero__portrait::before {
+    content: '';
+    position: absolute;
+    inset: -18% -24% -10%;
+    z-index: -1;
+    background:
+      radial-gradient(58% 52% at 50% 44%, rgba(10, 9, 12, 0.92), rgba(10, 9, 12, 0.45) 62%, transparent 82%),
+      radial-gradient(70% 62% at 50% 50%, var(--color-brand-pink-wash), transparent 74%);
+  }
+}
+
+/* --- Doors as editorial type, not boxes --------------------- */
+
+.doors {
+  display: grid;
+  /* Overrides the two-column rule these used to have as boxes. Stacked
+     ruled rows read as a decision; side-by-side reads as navigation. */
+  grid-template-columns: 1fr !important;
+  gap: 0;
+  max-width: 30rem;
+  border-top: 1px solid var(--color-line-subtle);
+}
+.door {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  min-height: 4.5rem;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-line-subtle);
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  text-decoration: none;
+  color: var(--color-ink-900);
+  overflow: hidden;
+}
+.door::before {
+  content: '';
+  position: absolute;
+  inset-block-end: -1px; inset-inline-start: 0;
+  height: 1px; width: 0;
+  background: var(--color-brand-pink);
+  transition: width var(--duration-slow) var(--ease-out-expo);
+}
+.door:hover::before, .door:focus-visible::before { width: 100%; }
+
+.door__label {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+  transition: transform var(--duration-base) var(--ease-out-expo);
+}
+.door:hover .door__label { transform: translateX(var(--space-3)); }
+
+.door__arrow {
+  flex: none;
+  color: var(--color-brand-pink);
+  border: 0; background: none; width: auto; height: auto;
+  transition: transform var(--duration-base) var(--ease-out-expo);
+}
+.door:hover .door__arrow { transform: translateX(var(--space-2)); }
+
+/* ============================================================
+   PROGRESSIVE ENGINE
+   ============================================================ */
+
+.ask1 {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: start;
+  max-width: 34rem;
+  padding-block: var(--space-8) var(--space-4);
+}
+.ask1__q {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  color: var(--color-ink-900);
+  max-width: 20ch;
+}
+.ask1__readout { margin: 0; }
+.ask1 .range { width: 100%; }
+.ask1__go { margin-top: var(--space-2); }
+
+/* Everything past the first question is closed until asked for. Height
+   is animated via grid-template-rows so nothing has to be measured in
+   JS and no layout shift is possible. */
+.engine__more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows var(--duration-cinematic) var(--ease-out-expo),
+              opacity var(--duration-slow) var(--ease-out-expo);
+}
+.engine__more > * { overflow: hidden; min-height: 0; }
+.engine.is-open .engine__more { grid-template-rows: 1fr; opacity: 1; }
+.engine.is-open .ask1__go { display: none; }
+.engine:not(.is-open) .atlas { display: none; }
+
+@media (min-width: 64rem) {
+  .engine.is-open .engine__more {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-rows: 1fr;
+    gap: var(--space-24);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .engine__more { transition: none; }
+}
+
+/* --- The rule marker on the share track --------------------- */
+.rulemark {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+}
+.rulemark__line { color: var(--color-brand-pink-glow); }
+
+/* Past the line, the headline number turns amber. The tool bends
+   without quietly abandoning the rule Jake is endorsed for. */
+.engine.is-over-rule .result__price,
+.engine.is-over-rule [data-out="share-pct"] { color: var(--color-accent-warm); }
+.engine.is-over-rule .result__headline { border-color: rgba(255, 158, 94, 0.4); }
+
+/* --- Atlas: map left, ladder right -------------------------- */
+.atlas__split { display: grid; gap: var(--space-8); align-items: start; }
+@media (min-width: 64rem) {
+  .atlas__split { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: var(--space-12); }
+  .atlas__map { position: sticky; top: var(--space-8); }
+}
+.atlas__map canvas { height: clamp(18rem, 30vw, 24rem); }
+
+.prow { cursor: default; transition: background-color var(--duration-fast) var(--ease-out-expo); }
+.prow.is-hot { background: rgba(224, 19, 132, 0.07); }
+
 </style>
 
 <a class="skip-link" href="#main">Skip to content</a>
@@ -2154,31 +2348,26 @@ html:not(.js-on) .hero__media img { opacity: 1; }
         </p>
       </div>
 
+      <!-- Shot on black, so it dissolves into the page with no edge. -->
+      <figure class="hero__portrait">
+        <picture>
+          <source type="image/webp">
+          <img src="data:image/webp;base64,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" alt="Jake Roth, Pink Realty, Colorado Springs"
+               width="600" height="750" fetchpriority="high" decoding="async">
+        </picture>
+      </figure>
+
       <nav class="doors" aria-label="Choose your path">
-        <a class="door glass glass--lit" href="#paths" data-press data-magnetic="0.06">
-          <span>
-            <span class="door__label">I'm Buying</span>
-            <span class="door__sub">Find the right home at the right number</span>
-          </span>
-          <span class="door__arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+        <a class="door" href="#paths" data-press>
+          <span class="door__label">I&rsquo;m buying</span>
+          <svg class="door__arrow" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a class="door glass glass--lit" href="#paths" data-press data-magnetic="0.06">
-          <span>
-            <span class="door__label">I'm Selling</span>
-            <span class="door__sub">Price it right, market it properly, net more</span>
-          </span>
-          <span class="door__arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+        <a class="door" href="#paths" data-press>
+          <span class="door__label">I&rsquo;m selling</span>
+          <svg class="door__arrow" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
       </nav>
     </div>
-
-    <p class="hero__scroll" aria-hidden="true">
-      <span>Scroll</span><span class="hero__scroll-track"></span>
-    </p>
   </header>
 
   <span data-rail-sentinel aria-hidden="true"></span>
@@ -2188,8 +2377,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
     <div class="container container--wide">
       <div class="credentials__grid">
         <div class="credentials__copy">
-          <p class="eyebrow">Credentials</p>
-          <h2 class="credentials__statement" id="cred-title" data-reveal>
+                    <h2 class="credentials__statement" id="cred-title" data-reveal>
             Ramsey does not hand this out. You have to keep earning it.
           </h2>
           <p class="body-text" data-reveal data-reveal-stagger="80">
@@ -2239,8 +2427,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   <section class="section" id="paths" aria-labelledby="paths-title">
     <div class="container container--wide">
       <div class="section-head">
-        <p class="eyebrow">Two journeys</p>
-        <h2 class="display display--lg" id="paths-title" data-reveal>
+                <h2 class="display display--lg" id="paths-title" data-reveal>
           Two problems. Two plans. Never the same advice.
         </h2>
         <p class="body-text" data-reveal data-reveal-stagger="80">
@@ -2283,31 +2470,41 @@ html:not(.js-on) .hero__media img { opacity: 1; }
         </p>
       </div>
 
-      <div class="engine__grid">
+      <!-- STEP ONE. One question, nothing else, until it is answered. -->
+      <div class="ask1">
+        <label class="ask1__q" for="take-home">What lands in your account each month, after taxes?</label>
+        <p class="field__readout ask1__readout">
+          <span class="field__currency">$</span>
+          <span class="field__amount numeric" data-out="take-home">9,000</span>
+          <span class="field__per">/ month</span>
+        </p>
+        <input class="range" type="range" id="take-home" min="2500" max="20000" step="100" value="9000">
+        <button class="btn btn--primary btn--lg ask1__go" type="button" data-engine-reveal
+                data-press aria-expanded="false">Show me the number</button>
+      </div>
+
+      <div class="engine__grid engine__more">
 
         <!-- CONTROLS -->
-        <div class="controls glass" data-reveal>
-          <div class="field">
-            <label class="field__label" for="take-home">Monthly take-home pay</label>
-            <p class="field__readout">
-              <span class="field__currency">$</span>
-              <span class="field__amount numeric" data-out="take-home">6,200</span>
-              <span class="field__per">/ month</span>
-            </p>
-            <input class="range" type="range" id="take-home"
-                   min="2500" max="20000" step="100" value="6200"
-                   aria-describedby="take-home-help">
-            <p class="meta" id="take-home-help">What actually lands in your account after taxes.</p>
-          </div>
-
+        <div class="controls" data-reveal>
           <div class="field">
             <label class="field__label" for="down-payment">Down payment saved</label>
             <p class="field__readout">
               <span class="field__currency">$</span>
-              <span class="field__amount numeric" data-out="down">40,000</span>
+              <span class="field__amount numeric" data-out="down">80,000</span>
             </p>
-            <input class="range" type="range" id="down-payment"
-                   min="0" max="200000" step="2500" value="40000">
+            <input class="range" type="range" id="down-payment" min="0" max="250000" step="2500" value="80000">
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="share">Share of take-home you will spend</label>
+            <p class="field__readout">
+              <span class="field__amount numeric" data-out="share-pct">25%</span>
+            </p>
+            <input class="range range--marked" type="range" id="share"
+                   min="15" max="40" step="1" value="25" aria-describedby="share-note">
+            <p class="rulemark"><span>15%</span><span class="rulemark__line">Ramsey&rsquo;s line &mdash; 25%</span><span>40%</span></p>
+            <p class="meta" id="share-note" data-out="share-note"></p>
           </div>
 
           <fieldset class="term" style="border:0;padding:0;margin:0">
@@ -2330,11 +2527,11 @@ html:not(.js-on) .hero__media img { opacity: 1; }
         <!-- RESULT -->
         <div class="result">
           <div class="result__headline glass" data-reveal data-reveal-stagger="80">
-            <p class="result__caption">At 25% of take-home, you can buy up to</p>
+            <p class="result__caption">At <span class="numeric" data-out="share-pct">25%</span> of take-home, you can buy up to</p>
             <output class="result__price numeric" data-out="price" for="take-home down-payment">$0</output>
             <p class="result__payment">
-              <strong class="numeric" data-out="payment">$0</strong> per month, all in —
-              that's <span class="numeric" data-out="share">25%</span> of your take-home.
+              <strong class="numeric" data-out="payment">$0</strong> per month &mdash; principal,
+              interest, taxes and insurance, all in.
             </p>
           </div>
 
@@ -2386,17 +2583,17 @@ html:not(.js-on) .hero__media img { opacity: 1; }
           <p class="atlas__count" data-out="atlas-count" role="status" aria-live="polite"></p>
         </div>
 
-        <div class="atlas__map">
-          <canvas data-atlas-map aria-hidden="true"></canvas>
-          <p class="atlas__legend">
-            <span class="lg lg--in">In reach</span>
-            <span class="lg lg--out">Above your number</span>
-            <span class="lg lg--base">Installation</span>
-            <span class="lg lg--peak">Pikes Peak</span>
-          </p>
+        <div class="atlas__split">
+          <div class="atlas__map">
+            <canvas data-atlas-map aria-hidden="true"></canvas>
+            <p class="atlas__legend">
+              <span class="lg lg--in">In reach</span>
+              <span class="lg lg--out">Above your number</span>
+              <span class="lg lg--base">Installation</span>
+            </p>
+          </div>
+          <div class="plist" data-atlas></div>
         </div>
-
-        <div class="plist" data-atlas></div>
       </div>
 
       <!-- THE ASK · inherits what they just did -->
@@ -2446,8 +2643,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
           </div>
         </div>
         <div class="story__copy">
-          <p class="eyebrow">Who you are actually calling</p>
-          <h2 class="display display--lg" id="story-title" data-reveal>
+                    <h2 class="display display--lg" id="story-title" data-reveal>
             Straight answers, and the math to back them.
           </h2>
           <div data-story-body data-reveal data-reveal-stagger="80"></div>
@@ -2464,8 +2660,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   <!-- ========== VOICES · removes itself when empty ========== -->
   <section class="section section--tight" data-voices-section aria-labelledby="voices-title">
     <div class="container container--wide section-head">
-      <p class="eyebrow">In their words</p>
-      <h2 class="display display--md" id="voices-title">Twelve five-star reviews. None of them written by me.</h2>
+            <h2 class="display display--md" id="voices-title">Twelve five-star reviews. None of them written by me.</h2>
     </div>
     <div class="marquee">
       <div class="marquee__track" data-voices></div>
@@ -2744,7 +2939,12 @@ const ARRIVAL = {
 
 const ASSUMPTIONS = {
   updated: 'TODO_DATE',                   // TODO — shown on page; keep current
-  ramseyRule: 0.25,                       // payment ≤ 25% of monthly take-home
+  ramseyRule: 0.25,                       // the Ramsey line, marked on the track
+  /* The share is adjustable, but 25% stays the default and the track is
+     marked there. Above it the figure turns amber and says what the
+     stretch costs — the tool bends without ever quietly abandoning the
+     rule Jake is endorsed for. */
+  share: { min: 0.15, max: 0.40, step: 0.01, default: 0.25 },
   rate15: 0.059,                          // TODO — verify current 15-yr fixed
   rate30: 0.066,                          // TODO — verify current 30-yr fixed
   propertyTaxRate: 0.0049,                // TODO — verify El Paso County effective rate
@@ -3283,125 +3483,282 @@ function initRail(rail, sentinel) {
 
 /* ---- atlas.js ---- */
 /* ============================================================
-   THE ATLAS  ·  a real map, not a decoration
-   Every area, the peak, downtown and the four installations are drawn
-   at their TRUE latitude and longitude. Distances on screen are real
-   distances. That honesty is the whole point — a Colorado Springs
-   buyer can check it against what they already know, and a PCS buyer
-   can see how far a neighbourhood actually sits from their base.
+   THE ATLAS  ·  drawn relief of the Pikes Peak region
+   Every area sits at its true latitude and longitude, so distances on
+   screen are real distances. A local can check it against what they
+   already know; a PCS buyer can see how far an area sits from base.
 
-   Deliberately NOT stock photography: captioning a downloaded image
+   What is NOT here: stock photography. Captioning a downloaded image
    "Briargate" when it is not Briargate is misrepresentation, and
    neighbourhood imagery is Fair Housing territory (04_COMPLIANCE §3).
+   Instead each area carries a glyph drawn from something factually
+   true about it — a Victorian gable for Old Colorado City's 1890s
+   stock, pines for Monument, a golf flag for Flying Horse.
 
-   Canvas 2D, no library, no tiles, no network.
+   Canvas 2D. No library, no tiles, no network.
    ============================================================ */
 
-const PAD = 0.055;   // fraction of the frame kept clear at the edges
+const PINK = '#FF4FA8';
+const PINK_DEEP = 'rgba(224,19,132,';
+const ROCK = 'rgba(177,97,63,';
+const DIM = 'rgba(255,255,255,0.2)';
+
+/* ---- Glyphs · 1 unit ≈ 1px at scale 1, drawn around (0,0) ---- */
+const GLYPHS = {
+  /* Attached rooflines — Westside condos */
+  row(c) {
+    c.beginPath();
+    for (let i = -1; i <= 1; i++) {
+      c.moveTo(i * 5 - 2.2, 2); c.lineTo(i * 5, -1.4); c.lineTo(i * 5 + 2.2, 2);
+    }
+    c.stroke();
+  },
+  /* Street grid — Southeast Springs */
+  grid(c) {
+    c.beginPath();
+    c.moveTo(-4, -2); c.lineTo(4, -2); c.moveTo(-4, 2); c.lineTo(4, 2);
+    c.moveTo(-1.5, -4); c.lineTo(-1.5, 4); c.moveTo(1.5, -4); c.lineTo(1.5, 4);
+    c.stroke();
+  },
+  /* Open water — Security-Widefield, Big Johnson Reservoir */
+  water(c) {
+    c.beginPath();
+    for (let r = -2; r <= 2; r += 2) {
+      c.moveTo(-5, r);
+      c.bezierCurveTo(-2.5, r - 1.6, 2.5, r + 1.6, 5, r);
+    }
+    c.stroke();
+  },
+  /* Creek chevrons — Fountain, on Fountain Creek */
+  creek(c) {
+    c.beginPath();
+    c.moveTo(-4, -3); c.lineTo(0, 0); c.lineTo(-4, 3);
+    c.moveTo(1, -3); c.lineTo(5, 0); c.lineTo(1, 3);
+    c.stroke();
+  },
+  /* Victorian gable with finial — Old Colorado City, 1890s–1930s */
+  gable(c) {
+    c.beginPath();
+    c.moveTo(-4.5, 3.5); c.lineTo(-4.5, -0.5); c.lineTo(0, -4);
+    c.lineTo(4.5, -0.5); c.lineTo(4.5, 3.5);
+    c.moveTo(0, -4); c.lineTo(0, -6.2);
+    c.stroke();
+  },
+  /* Large parcel — Falcon, many lots over 0.3 acre */
+  parcel(c) {
+    c.beginPath();
+    c.rect(-4.5, -3.2, 9, 6.4);
+    c.moveTo(-4.5, 0); c.lineTo(4.5, 0);
+    c.stroke();
+  },
+  /* Foothill — Rockrimmon, sloped lots against the range */
+  hill(c) {
+    c.beginPath();
+    c.moveTo(-5.5, 3.5); c.lineTo(-1.5, -2.5); c.lineTo(1, 1);
+    c.lineTo(3, -1.5); c.lineTo(5.5, 3.5);
+    c.stroke();
+  },
+  /* Rooftop cluster — Briargate, dense 1988–2004 build-out */
+  cluster(c) {
+    c.beginPath();
+    c.moveTo(-5, 3); c.lineTo(-5, 0); c.lineTo(-2.5, -2); c.lineTo(0, 0); c.lineTo(0, 3);
+    c.moveTo(0.6, 3); c.lineTo(0.6, -0.5); c.lineTo(3, -2.4); c.lineTo(5.4, -0.5); c.lineTo(5.4, 3);
+    c.stroke();
+  },
+  /* Trail — Cordera, internal trail network on Cottonwood Creek */
+  trail(c) {
+    c.beginPath();
+    c.moveTo(-5, 3.5);
+    c.bezierCurveTo(-1, 2, -3, -2, 1, -3);
+    c.bezierCurveTo(3.5, -3.6, 4.5, -1, 5, 1);
+    c.stroke();
+  },
+  /* Pines — Monument, at the Pike National Forest edge */
+  pines(c) {
+    c.beginPath();
+    [-3.4, 0.2, 3.6].forEach((x, i) => {
+      const s = i === 1 ? 1.25 : 1;
+      c.moveTo(x - 2.4 * s, 3); c.lineTo(x, -3.6 * s); c.lineTo(x + 2.4 * s, 3);
+    });
+    c.stroke();
+  },
+  /* Flag — Flying Horse, golf course community */
+  flag(c) {
+    c.beginPath();
+    c.moveTo(-1.5, 4); c.lineTo(-1.5, -4.5);
+    c.lineTo(3.8, -3); c.lineTo(-1.5, -1.4);
+    c.stroke();
+  },
+  /* Peak-side crest — Broadmoor, against Cheyenne Mountain */
+  crest(c) {
+    c.beginPath();
+    c.moveTo(-5.5, 3.5); c.lineTo(-0.5, -4); c.lineTo(5.5, 3.5);
+    c.moveTo(-2.6, -0.2); c.lineTo(-0.5, -1.4); c.lineTo(1.6, -0.2);
+    c.stroke();
+  },
+};
+
+const GLYPH_FOR = {
+  'Westside condos': 'row',
+  'Southeast Springs': 'grid',
+  'Security-Widefield': 'water',
+  Fountain: 'creek',
+  'Old Colorado City': 'gable',
+  Falcon: 'parcel',
+  Rockrimmon: 'hill',
+  Briargate: 'cluster',
+  Cordera: 'trail',
+  Monument: 'pines',
+  'Flying Horse': 'flag',
+  Broadmoor: 'crest',
+};
 
 function initAtlas(canvas, opts = {}) {
   const ctx = canvas.getContext('2d');
-  if (!ctx) return { destroy() {}, setReach() {} };
+  if (!ctx) return { destroy() {}, setReach() {}, setHover() {} };
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const pts = [...PLACES, ...LANDMARKS];
-  const lats = pts.map((p) => p.lat);
-  const lngs = pts.map((p) => p.lng);
-  const bounds = {
-    n: Math.max(...lats), s: Math.min(...lats),
-    e: Math.max(...lngs), w: Math.min(...lngs),
+  const all = [...PLACES, ...LANDMARKS];
+  const b = {
+    n: Math.max(...all.map((p) => p.lat)), s: Math.min(...all.map((p) => p.lat)),
+    e: Math.max(...all.map((p) => p.lng)), w: Math.min(...all.map((p) => p.lng)),
   };
 
-  let w = 0, h = 0, dpr = 1, raf = 0;
-  let reach = Infinity;          // current max affordable price
-  let phase = 0;                 // ambient pulse
+  let w = 0, h = 0, dpr = 1, raf = 0, phase = 0;
+  let reach = Infinity;
   let hovered = null;
 
-  /* Mercator is overkill at this scale — at ~0.5° of latitude the
-     distortion is under a pixel. A linear projection with a cosine
-     correction on longitude is accurate here and far cheaper. */
+  /* Linear projection with a cosine correction on longitude. At half a
+     degree of latitude, Mercator's distortion here is sub-pixel. */
   function project(lat, lng) {
-    const midLat = (bounds.n + bounds.s) / 2;
-    const kx = Math.cos((midLat * Math.PI) / 180);
-    const x0 = (bounds.w - 0.02) * kx, x1 = (bounds.e + 0.02) * kx;
-    const y0 = bounds.n + 0.02, y1 = bounds.s - 0.02;
-    const fx = ((lng * kx) - x0) / (x1 - x0);
-    const fy = (y0 - lat) / (y0 - y1);
+    const k = Math.cos(((b.n + b.s) / 2 * Math.PI) / 180);
+    const x0 = (b.w - 0.035) * k, x1 = (b.e + 0.02) * k;
+    const y0 = b.n + 0.03, y1 = b.s - 0.03;
     return {
-      x: (PAD + fx * (1 - PAD * 2)) * w,
-      y: (PAD + fy * (1 - PAD * 2)) * h,
+      x: (0.06 + ((lng * k - x0) / (x1 - x0)) * 0.88) * w,
+      y: (0.07 + ((y0 - lat) / (y0 - y1)) * 0.86) * h,
     };
   }
 
-  function resize() {
+  /* Self-healing size. This canvas is created inside a display:none
+     subtree (the engine's progressive disclosure), so its first
+     measurement is zero. Observers proved unreliable across that
+     particular visibility change, so instead every draw path re-checks
+     its own box and re-allocates the backing store when it has moved.
+     Returns true when the store changed. Never calls draw() itself, so
+     it can be used safely from inside draw paths. */
+  function syncSize() {
     const r = canvas.getBoundingClientRect();
+    const nw = Math.max(1, Math.round(r.width));
+    const nh = Math.max(1, Math.round(r.height));
+    if (nw === w && nh === h) return false;
+    w = nw; h = nh;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = Math.max(1, Math.round(r.width));
-    h = Math.max(1, Math.round(r.height));
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw();
+    return true;
   }
 
-  function drawGraticule() {
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
-    ctx.lineWidth = 1;
-    for (let i = 1; i < 7; i++) {
-      const x = (i / 7) * w, y = (i / 7) * h;
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
-    ctx.restore();
-  }
+  function resize() { syncSize(); draw(); }
 
-  /* The Front Range runs north-south down the west edge of the city.
-     Drawn from the real ridge longitude so the map reads as this place
-     and not as a generic scatter plot. */
-  function drawRange() {
-    ctx.save();
+  /* --- The Front Range, drawn as relief with Pikes Peak named --- */
+  function drawRelief() {
+    const peak = project(38.8405, -105.0442);
+    const baseY = h * 0.94;
+
+    /* Back ridge — the range continuing north and south of the summit. */
     ctx.beginPath();
-    for (let i = 0; i <= 40; i++) {
-      const lat = bounds.n + 0.04 - (i / 40) * (bounds.n - bounds.s + 0.08);
-      const wobble = Math.sin(i * 0.55) * 0.012 + Math.sin(i * 1.7) * 0.005;
-      const p = project(lat, -104.98 + wobble);
-      i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
-    }
-    ctx.strokeStyle = 'rgba(177,97,63,0.5)';   // --color-rock
-    ctx.lineWidth = 1.5;
+    ctx.moveTo(-10, baseY);
+    const ridge = [
+      [-10, h * 0.30], [w * 0.045, h * 0.20], [w * 0.085, h * 0.34],
+      [w * 0.12, h * 0.25], [w * 0.155, h * 0.40], [w * 0.185, h * 0.33],
+      [w * 0.21, h * 0.48],
+    ];
+    ridge.forEach(([x, y]) => ctx.lineTo(x, y));
+    ctx.lineTo(w * 0.21, baseY);
+    ctx.closePath();
+    ctx.fillStyle = ROCK + '0.10)';
+    ctx.fill();
+    ctx.strokeStyle = ROCK + '0.34)';
+    ctx.lineWidth = 1;
     ctx.stroke();
-    ctx.lineTo(0, h); ctx.lineTo(0, 0); ctx.closePath();
-    ctx.fillStyle = 'rgba(177,97,63,0.07)';
+
+    /* Pikes Peak itself — a real summit, front-most, with a snow cap. */
+    const pw = w * 0.085;
+    const ph = h * 0.34;
+    const apex = { x: peak.x, y: peak.y - ph * 0.42 };
+
+    ctx.beginPath();
+    ctx.moveTo(apex.x - pw, baseY);
+    ctx.lineTo(apex.x - pw * 0.42, apex.y + ph * 0.42);
+    ctx.lineTo(apex.x - pw * 0.16, apex.y + ph * 0.10);
+    ctx.lineTo(apex.x, apex.y);
+    ctx.lineTo(apex.x + pw * 0.22, apex.y + ph * 0.16);
+    ctx.lineTo(apex.x + pw * 0.55, apex.y + ph * 0.38);
+    ctx.lineTo(apex.x + pw, baseY);
+    ctx.closePath();
+    const g = ctx.createLinearGradient(apex.x, apex.y, apex.x, baseY);
+    g.addColorStop(0, ROCK + '0.32)');
+    g.addColorStop(1, ROCK + '0.05)');
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = ROCK + '0.6)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    /* Snow cap. Clipped to the summit silhouette so it can never spill
+       outside the mountain, with a ragged lower edge — a straight line
+       across the top would read as a triangle with a hat on it. */
+    ctx.save();
+    ctx.clip();
+    ctx.beginPath();
+    ctx.moveTo(apex.x - pw * 0.5, apex.y + ph * 0.40);
+    ctx.lineTo(apex.x - pw * 0.34, apex.y + ph * 0.22);
+    ctx.lineTo(apex.x - pw * 0.20, apex.y + ph * 0.30);
+    ctx.lineTo(apex.x - pw * 0.06, apex.y + ph * 0.09);
+    ctx.lineTo(apex.x + pw * 0.06, apex.y + ph * 0.22);
+    ctx.lineTo(apex.x + pw * 0.20, apex.y + ph * 0.14);
+    ctx.lineTo(apex.x + pw * 0.34, apex.y + ph * 0.34);
+    ctx.lineTo(apex.x + pw * 0.6, apex.y + ph * 0.46);
+    ctx.lineTo(apex.x + pw, apex.y - 4);
+    ctx.lineTo(apex.x - pw, apex.y - 4);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(255,255,255,0.88)';
     ctx.fill();
     ctx.restore();
+
+    ctx.font = '600 9px "Inter Tight", system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.textAlign = 'center';
+    ctx.fillText('PIKES PEAK', apex.x, baseY - h * 0.03);
+    ctx.font = '400 8px "Inter Tight", system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.28)';
+    ctx.fillText('14,115 FT', apex.x, baseY - h * 0.03 + 11);
   }
 
   function drawLandmarks() {
     ctx.save();
-    LANDMARKS.forEach((l) => {
+    ctx.font = '500 9px "Inter Tight", system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    LANDMARKS.filter((l) => l.kind !== 'peak').forEach((l) => {
       const p = project(l.lat, l.lng);
       ctx.beginPath();
-      if (l.kind === 'peak') {
-        ctx.moveTo(p.x, p.y - 7); ctx.lineTo(p.x + 6, p.y + 4);
-        ctx.lineTo(p.x - 6, p.y + 4); ctx.closePath();
-        ctx.fillStyle = 'rgba(255,158,94,0.85)';
+      if (l.kind === 'city') {
+        ctx.rect(p.x - 3.5, p.y - 3.5, 7, 7);
+        ctx.fillStyle = 'rgba(255,255,255,0.34)';
         ctx.fill();
       } else {
-        ctx.rect(p.x - 3, p.y - 3, 6, 6);
-        ctx.strokeStyle = l.kind === 'base' ? 'rgba(127,212,255,0.7)' : 'rgba(255,255,255,0.5)';
-        ctx.lineWidth = 1.2;
+        /* Installations: a warm chevron rather than a blue square. */
+        ctx.moveTo(p.x, p.y - 4.5); ctx.lineTo(p.x + 4, p.y + 3);
+        ctx.lineTo(p.x - 4, p.y + 3); ctx.closePath();
+        ctx.strokeStyle = 'rgba(255,158,94,0.62)';
+        ctx.lineWidth = 1.1;
         ctx.stroke();
       }
-      ctx.font = '500 10px "Inter Tight", system-ui, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.42)';
-      ctx.textAlign = 'center';
-      /* Landmarks are the background layer, so they carry a ground shadow
-         and place labels are drawn over them with their own. Without this
-         the two label sets collide into an unreadable smear. */
-      ctx.shadowColor = 'rgba(5,4,6,0.95)';
-      ctx.shadowBlur = 6;
-      ctx.fillText(l.name.toUpperCase(), p.x, p.y + 18);
+      ctx.shadowColor = 'rgba(5,4,6,0.95)'; ctx.shadowBlur = 6;
+      ctx.fillStyle = 'rgba(255,255,255,0.38)';
+      ctx.fillText(l.name.toUpperCase(), p.x, p.y + 15);
       ctx.shadowBlur = 0;
     });
     ctx.restore();
@@ -3411,42 +3768,41 @@ function initAtlas(canvas, opts = {}) {
     PLACES.forEach((pl, i) => {
       const p = project(pl.lat, pl.lng);
       const inReach = pl.median <= reach;
-      const isHot = hovered === i;
+      const hot = hovered === i;
+      const pulse = inReach ? 0.5 + 0.5 * Math.sin(phase + i * 0.8) : 0;
 
-      /* In-reach markers carry a slow pink pulse. Out-of-reach ones stay
-         visible and labelled — the tool never hides what you cannot
-         afford, it just stops lighting it. */
-      const pulse = inReach ? 0.5 + 0.5 * Math.sin(phase + i * 0.7) : 0;
-      const r = isHot ? 9 : inReach ? 6 : 3.5;
-
-      if (inReach) {
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 26 + pulse * 8);
-        g.addColorStop(0, `rgba(224,19,132,${0.34 + pulse * 0.2})`);
-        g.addColorStop(1, 'rgba(224,19,132,0)');
+      if (inReach || hot) {
+        const rad = (hot ? 34 : 22) + pulse * 7;
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+        g.addColorStop(0, PINK_DEEP + (hot ? 0.5 : 0.3 + pulse * 0.16) + ')');
+        g.addColorStop(1, PINK_DEEP + '0)');
         ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 26 + pulse * 8, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p.x, p.y, rad, 0, Math.PI * 2); ctx.fill();
       }
 
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-      ctx.fillStyle = inReach ? '#FF4FA8' : 'rgba(255,255,255,0.22)';
-      ctx.fill();
+      /* The characteristic mark. Scaled up and brightened on hover so
+         the row-to-map link is unmistakable. */
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.scale(hot ? 1.5 : 1.1, hot ? 1.5 : 1.1);
+      ctx.lineWidth = hot ? 1.5 : 1.2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = hot ? '#FFFFFF' : inReach ? PINK : DIM;
+      (GLYPHS[GLYPH_FOR[pl.name]] || GLYPHS.cluster)(ctx);
+      ctx.restore();
 
-      if (inReach || isHot) {
+      if (inReach || hot) {
         ctx.save();
-        ctx.font = `${isHot ? 600 : 500} 11px "Inter Tight", system-ui, sans-serif`;
-        ctx.textAlign = 'left';
-        /* Sit the label above the marker rather than beside it: landmark
-           captions already occupy the space below, and alternating the
-           vertical offset keeps neighbouring areas from stacking. */
-        const ty = p.y - r - 7 - (i % 2) * 11;
-        ctx.shadowColor = 'rgba(5,4,6,0.98)';
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = 'rgba(5,4,6,0.9)';
-        ctx.fillText(pl.name, p.x - r - 1, ty);   // shadow pass
+        ctx.font = `${hot ? 600 : 500} 10px "Inter Tight", system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        const ty = p.y - 12 - (i % 2) * 10;
+        ctx.shadowColor = 'rgba(5,4,6,0.98)'; ctx.shadowBlur = 8;
+        ctx.fillStyle = 'rgba(5,4,6,0.95)';
+        ctx.fillText(pl.name, p.x, ty);
         ctx.shadowBlur = 0;
-        ctx.fillStyle = isHot ? '#FFFFFF' : '#FF4FA8';
-        ctx.fillText(pl.name, p.x - r - 1, ty);
+        ctx.fillStyle = hot ? '#FFFFFF' : PINK;
+        ctx.fillText(pl.name, p.x, ty);
         ctx.restore();
       }
     });
@@ -3454,40 +3810,46 @@ function initAtlas(canvas, opts = {}) {
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    drawGraticule();
-    drawRange();
+    drawRelief();
     drawLandmarks();
     drawPlaces();
   }
 
-  function loop() {
-    phase += 0.02;
-    draw();
-    raf = requestAnimationFrame(loop);
+  /* Visibility is checked INSIDE the loop rather than gating it from an
+     IntersectionObserver. The observer fires "not intersecting" while the
+     canvas is still inside the engine's display:none subtree and then
+     does not reliably fire again on reveal, which left the loop dead and
+     the backing store stuck at 1px. A rect test per frame is a rounding
+     error next to the drawing itself and cannot get stuck. */
+  function onScreen() {
+    const r = canvas.getBoundingClientRect();
+    return r.width > 1 && r.bottom > -200 && r.top < window.innerHeight + 200;
   }
 
-  let visible = false;
-  const io = new IntersectionObserver(([e]) => {
-    visible = e.isIntersecting;
-    if (visible && !reduced.matches && !raf) raf = requestAnimationFrame(loop);
-    if (!visible && raf) { cancelAnimationFrame(raf); raf = 0; }
-  }, { threshold: 0 });
-  io.observe(canvas);
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    if (!onScreen()) return;
+    syncSize();
+    phase += 0.02;
+    draw();
+  }
+
+  if (!reduced.matches) raf = requestAnimationFrame(loop);
 
   canvas.addEventListener('pointermove', (e) => {
     const r = canvas.getBoundingClientRect();
     const mx = e.clientX - r.left, my = e.clientY - r.top;
-    let best = null, bestD = 22;
+    let best = null, bd = 24;
     PLACES.forEach((pl, i) => {
       const p = project(pl.lat, pl.lng);
       const d = Math.hypot(p.x - mx, p.y - my);
-      if (d < bestD) { bestD = d; best = i; }
+      if (d < bd) { bd = d; best = i; }
     });
     if (best !== hovered) {
       hovered = best;
       canvas.style.cursor = best === null ? '' : 'pointer';
+      opts.onHover?.(best);
       if (reduced.matches || !raf) draw();
-      opts.onHover?.(best === null ? null : PLACES[best]);
     }
   });
   canvas.addEventListener('pointerleave', () => {
@@ -3502,10 +3864,15 @@ function initAtlas(canvas, opts = {}) {
   resize();
 
   return {
-    setReach(v) { reach = v; if (reduced.matches || !raf) draw(); },
+    /* resize() is exposed because this canvas is built inside a hidden
+       subtree and nothing about becoming visible is reliably observable
+       from in here. The owner knows when it revealed the panel, so the
+       owner tells us. Cheap, deterministic, no observer to get stuck. */
+    resize,
+    setReach(v) { reach = v; resize(); },
+    setHover(i) { hovered = i; resize(); },
     destroy() {
       if (raf) cancelAnimationFrame(raf);
-      io.disconnect();
       window.removeEventListener('resize', onResize);
     },
   };
@@ -3541,8 +3908,8 @@ function paymentFactor(annualRate, years) {
    Rearranged for price. Taxes and insurance scale with the home's
    value, which is why they belong inside the solve rather than being
    subtracted afterwards as a flat guess. */
-function maxPrice({ takeHome, down, years }) {
-  const budget = takeHome * ASSUMPTIONS.ramseyRule;
+function maxPrice({ takeHome, down, years, share = ASSUMPTIONS.ramseyRule }) {
+  const budget = takeHome * share;
   const rate = years === 15 ? ASSUMPTIONS.rate15 : ASSUMPTIONS.rate30;
   const f = paymentFactor(rate, years);
   const carry = (ASSUMPTIONS.propertyTaxRate + ASSUMPTIONS.insuranceRate) / 12;
@@ -3574,9 +3941,13 @@ function initEngine(root, hooks = {}) {
     down: root.querySelector('#down-payment'),
     downOut: root.querySelector('[data-out="down"]'),
     terms: root.querySelectorAll('input[name="term"]'),
+    share: root.querySelector('#share'),
+    shareOut: root.querySelectorAll('[data-out="share-pct"]'),
+    shareNote: root.querySelector('[data-out="share-note"]'),
+    stage: root,
+    reveal: root.querySelector('[data-engine-reveal]'),
     price: root.querySelector('[data-out="price"]'),
     payment: root.querySelector('[data-out="payment"]'),
-    share: root.querySelector('[data-out="share"]'),
     pi: root.querySelector('[data-out="pi"]'),
     tax: root.querySelector('[data-out="tax"]'),
     ins: root.querySelector('[data-out="ins"]'),
@@ -3600,6 +3971,21 @@ function initEngine(root, hooks = {}) {
   };
   applyBounds(el.takeHome, ASSUMPTIONS.takeHome);
   applyBounds(el.down, ASSUMPTIONS.down);
+  if (el.share) {
+    const c = ASSUMPTIONS.share;
+    el.share.min = String(c.min * 100); el.share.max = String(c.max * 100);
+    el.share.step = String(c.step * 100); el.share.value = String(c.default * 100);
+  }
+
+  /* Progressive disclosure: one question, then everything. Opening on a
+     wall of sliders is what makes a calculator feel like paperwork. */
+  if (el.reveal) {
+    el.reveal.addEventListener('click', () => {
+      root.classList.add('is-open');
+      el.reveal.setAttribute('aria-expanded', 'true');
+      root.querySelector('[data-out="price"]')?.focus?.();
+    }, { once: true });
+  }
 
   /* Cards are built once, then only their state class changes. Never
      re-render the list on input — that would thrash layout on drag. */
@@ -3634,19 +4020,34 @@ function initEngine(root, hooks = {}) {
     const takeHome = Number(el.takeHome.value);
     const down = Number(el.down.value);
     const years = getYears();
+    const share = el.share ? Number(el.share.value) / 100 : ASSUMPTIONS.ramseyRule;
 
     setRangeFill(el.takeHome);
     setRangeFill(el.down);
+    if (el.share) setRangeFill(el.share);
+
+    const overRule = share > ASSUMPTIONS.ramseyRule + 0.0001;
+    root.classList.toggle('is-over-rule', overRule);
+    el.shareOut?.forEach((n) => { n.textContent = `${Math.round(share * 100)}%`; });
+    if (el.shareNote) {
+      const atRule = maxPrice({ takeHome, down, years, share: ASSUMPTIONS.ramseyRule });
+      const gap = Math.round(takeHome * (share - ASSUMPTIONS.ramseyRule));
+      el.shareNote.textContent = overRule
+        ? `That is ${usd.format(gap)} a month past the 25% line \u2014 ${usd.format(maxPrice({ takeHome, down, years, share }) - atRule)} more house, paid for out of everything else you do.`
+        : share < ASSUMPTIONS.ramseyRule
+          ? 'Below the line. More room left over every month.'
+          : 'On the line Ramsey teaches, and the one I would hold you to.';
+    }
 
     el.takeHomeOut.textContent = takeHome.toLocaleString('en-US');
     el.downOut.textContent = down.toLocaleString('en-US');
 
-    const price = maxPrice({ takeHome, down, years });
+    const price = maxPrice({ takeHome, down, years, share });
     const b = breakdown({ price, down, years });
 
     el.price.textContent = usd.format(price);
     el.payment.textContent = usd.format(b.total);
-    el.share.textContent = `${Math.round((b.total / takeHome) * 100)}%`;
+
     el.pi.textContent = usd.format(b.principalInterest);
     el.tax.textContent = usd.format(b.taxes);
     el.ins.textContent = usd.format(b.insurance);
@@ -3656,7 +4057,7 @@ function initEngine(root, hooks = {}) {
        buys more house and costs dramatically more money — show both
        numbers rather than editorialising about either. */
     const other = years === 15 ? 30 : 15;
-    const otherPrice = maxPrice({ takeHome, down, years: other });
+    const otherPrice = maxPrice({ takeHome, down, years: other, share });
     const otherB = breakdown({ price: otherPrice, down, years: other });
     const interestGap = Math.abs(otherB.totalInterest - b.totalInterest);
 
@@ -3697,6 +4098,7 @@ function initEngine(root, hooks = {}) {
   el.takeHome.addEventListener('input', update);
   el.down.addEventListener('input', update);
   el.terms.forEach((t) => t.addEventListener('change', update));
+  el.share?.addEventListener('input', update);
 
   update();
 }
@@ -3990,8 +4392,33 @@ function boot() {
   /* The map and the price ladder read from one source of truth: the
      engine pushes its result out, the map re-lights. */
   const mapCanvas = $('[data-atlas-map]');
-  const atlas = mapCanvas ? initAtlas(mapCanvas) : null;
+  const rows = () => $$('[data-atlas] .prow');
+  const atlas = mapCanvas ? initAtlas(mapCanvas, {
+    onHover: (i) => rows().forEach((r, n) => r.classList.toggle('is-hot', n === i)),
+  }) : null;
   initEngine($('[data-engine]'), { onReach: (price) => atlas?.setReach(price) });
+
+  /* The Atlas is created inside the engine's collapsed panel, so it has no
+     box to measure until the panel opens. Tell it the moment that happens
+     — after the grid transition has actually laid out. */
+  $('[data-engine-reveal]')?.addEventListener('click', () => {
+    requestAnimationFrame(() => atlas?.resize());
+    setTimeout(() => atlas?.resize(), 900);
+  });
+
+  /* Hovering a row lights its point on the map, and vice versa. The two
+     views are one thing, so they have to move together. */
+  $('[data-atlas]')?.addEventListener('pointerover', (e) => {
+    const row = e.target.closest('.prow');
+    if (!row) return;
+    const i = rows().indexOf(row);
+    rows().forEach((r, n) => r.classList.toggle('is-hot', n === i));
+    atlas?.setHover(i);
+  });
+  $('[data-atlas]')?.addEventListener('pointerleave', () => {
+    rows().forEach((r) => r.classList.remove('is-hot'));
+    atlas?.setHover(null);
+  });
 
   initHeroScrub($('[data-hero-scrub]'), $('.hero__copy'));
   initNameReveal($('[data-name-reveal]'));

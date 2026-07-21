@@ -247,9 +247,10 @@ html:not(.js-on) .hero__media img { opacity: 1; }
 .credentials {
   position: relative;
   background:
-    radial-gradient(60rem 30rem at 50% 0%, var(--color-ramsey-navy-lift), transparent 70%),
-    var(--color-ramsey-navy);
-  border-block: 1px solid rgba(255, 255, 255, 0.09);
+    radial-gradient(56rem 30rem at 26% 0%, var(--color-brand-pink-wash), transparent 68%),
+    radial-gradient(40rem 24rem at 82% 100%, var(--color-ember-wash), transparent 70%),
+    var(--color-credentials);
+  border-block: 1px solid var(--color-line-subtle);
   padding-block: var(--section-gap-md);
   z-index: var(--z-content);
 }
@@ -317,7 +318,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
 }
 .wordmark span { color: var(--color-brand-pink-glow); }
 
-.credentials .meta { color: rgba(255, 255, 255, 0.66); }
+.credentials .meta { color: var(--color-ink-500); }
 
 /* ------------------------------------------------------------
    PROOF  ·  numeric counters, 02_MOTION.md §6
@@ -743,7 +744,7 @@ html:not(.js-on) .hero__media img { opacity: 1; }
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--color-brand-pink-glow);
 }
 .marks__logo { width: clamp(11rem, 24vw, 16rem); height: auto; }
 

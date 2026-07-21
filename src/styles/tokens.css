@@ -29,11 +29,15 @@
   --color-brand-pink-glow: #FF4FA8;  /* 6.6:1 on base — the only pink safe for small text */
   --color-brand-pink-wash: rgba(224, 19, 132, 0.14);
 
-  /* --- COLOR · RAMSEY --------------------------------------
-     PROVISIONAL. Must be sampled from the official badge asset,
-     never invented. The badge itself is never recolored. */
-  --color-ramsey-navy:      #0E2A47;
-  --color-ramsey-navy-lift: #16385C;
+  /* --- COLOR · CREDENTIALS FIELD ---------------------------
+     Was Ramsey navy. Removed: the navy band existed as a "room" for a
+     navy badge, but the supplied shield ships with its own alpha and the
+     network graphic's own ground is near-black wood. The room was built
+     for a problem that no longer exists, and it put the page's only cold
+     colour next to its warmest asset. Black and pink throughout now.
+     The Ramsey assets themselves are still never recoloured. */
+  --color-credentials:      #100C10;
+  --color-credentials-lift: #1B1219;
 
   /* --- COLOR · THE ROCK BRIDGE -----------------------------
      Sampled directly out of Jake's own Garden of the Gods photograph
@@ -67,9 +71,12 @@
   --color-state-error:   #FF6B6B;
 
   /* --- COLOR · FOCUS ---------------------------------------
-     Deliberately NOT pink. A focus ring must never be confusable
-     with a brand accent, or keyboard users lose their place. */
-  --color-focus: #7FD4FF;
+     Still deliberately not pink — a focus ring that matches the brand
+     accent leaves keyboard users unable to find themselves. But cyan was
+     a stock a11y default and the only cold colour left on the page.
+     Warm white reads as unmistakably "system", clears 12:1 on every
+     surface here, and belongs to the palette. */
+  --color-focus: #FFE9C7;
 
   /* --- TYPE · FAMILIES -------------------------------------
      Two families, four weights. Perf budget: 02_MOTION.md

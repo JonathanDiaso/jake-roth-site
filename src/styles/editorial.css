@@ -149,10 +149,13 @@
   content: '';
   position: absolute;
   inset-block: 0;
-  inset-inline-start: calc(var(--gutter) * -1);
+  /* Sits ON the row's own edge. A negative gutter offset put this bar
+     outside the list entirely and painted it over the map beside it. */
+  inset-inline-start: 0;
   width: 2px;
   background: linear-gradient(to bottom, transparent, var(--color-brand-pink), transparent);
 }
+.prow { padding-inline-start: var(--space-4); }
 .prow--out { opacity: 0.5; }
 
 /* --- Quote · rule-based, no box ----------------------------- */
@@ -390,3 +393,186 @@
   color: var(--color-ink-300);
   text-align: center;
 }
+
+/* ============================================================
+   HERO PORTRAIT  ·  the face, in the first screen
+   A Ramsey referral is checking out a person. Show them the person.
+   The headshot was shot on #000004 and its black point is lifted to
+   the page ground in the asset pipeline, so it has no edge to hide —
+   the mask below only softens where it meets the photograph behind.
+   ============================================================ */
+
+.hero__inner { position: relative; }
+
+.hero__portrait { margin: 0; display: none; }
+@media (min-width: 64rem) {
+  .hero__portrait {
+    display: block;
+    position: absolute;
+    inset-inline-end: var(--gutter);
+    inset-block-start: clamp(4rem, 12vh, 7rem);
+    width: clamp(15rem, 21vw, 19rem);
+    line-height: 0;
+  }
+  .hero__portrait img {
+    width: 100%; height: auto;
+    /* The portrait is a near-black frame laid over a bright sky. Without
+       a ground behind it the subject simply disappears. */
+    filter: contrast(1.06) brightness(1.12);
+    /* The mask has to finish INSIDE the element or the photo's rectangle
+       edge stays visible — at 120% the corners never reach transparent,
+       which is exactly the pasted-on-box look this is meant to avoid. */
+    -webkit-mask-image:
+      radial-gradient(66% 60% at 50% 40%, #000 42%, transparent 80%),
+      linear-gradient(to bottom, #000 55%, transparent 92%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      radial-gradient(66% 60% at 50% 40%, #000 42%, transparent 80%),
+      linear-gradient(to bottom, #000 55%, transparent 92%);
+    mask-composite: intersect;
+  }
+  /* A pink rim behind him separates the portrait from the rock face
+     without putting a box around it. */
+  .hero__portrait::before {
+    content: '';
+    position: absolute;
+    inset: -18% -24% -10%;
+    z-index: -1;
+    background:
+      radial-gradient(58% 52% at 50% 44%, rgba(10, 9, 12, 0.92), rgba(10, 9, 12, 0.45) 62%, transparent 82%),
+      radial-gradient(70% 62% at 50% 50%, var(--color-brand-pink-wash), transparent 74%);
+  }
+}
+
+/* --- Doors as editorial type, not boxes --------------------- */
+
+.doors {
+  display: grid;
+  /* Overrides the two-column rule these used to have as boxes. Stacked
+     ruled rows read as a decision; side-by-side reads as navigation. */
+  grid-template-columns: 1fr !important;
+  gap: 0;
+  max-width: 30rem;
+  border-top: 1px solid var(--color-line-subtle);
+}
+.door {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  min-height: 4.5rem;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-line-subtle);
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  text-decoration: none;
+  color: var(--color-ink-900);
+  overflow: hidden;
+}
+.door::before {
+  content: '';
+  position: absolute;
+  inset-block-end: -1px; inset-inline-start: 0;
+  height: 1px; width: 0;
+  background: var(--color-brand-pink);
+  transition: width var(--duration-slow) var(--ease-out-expo);
+}
+.door:hover::before, .door:focus-visible::before { width: 100%; }
+
+.door__label {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+  transition: transform var(--duration-base) var(--ease-out-expo);
+}
+.door:hover .door__label { transform: translateX(var(--space-3)); }
+
+.door__arrow {
+  flex: none;
+  color: var(--color-brand-pink);
+  border: 0; background: none; width: auto; height: auto;
+  transition: transform var(--duration-base) var(--ease-out-expo);
+}
+.door:hover .door__arrow { transform: translateX(var(--space-2)); }
+
+/* ============================================================
+   PROGRESSIVE ENGINE
+   ============================================================ */
+
+.ask1 {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: start;
+  max-width: 34rem;
+  padding-block: var(--space-8) var(--space-4);
+}
+.ask1__q {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  color: var(--color-ink-900);
+  max-width: 20ch;
+}
+.ask1__readout { margin: 0; }
+.ask1 .range { width: 100%; }
+.ask1__go { margin-top: var(--space-2); }
+
+/* Everything past the first question is closed until asked for. Height
+   is animated via grid-template-rows so nothing has to be measured in
+   JS and no layout shift is possible. */
+.engine__more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows var(--duration-cinematic) var(--ease-out-expo),
+              opacity var(--duration-slow) var(--ease-out-expo);
+}
+.engine__more > * { overflow: hidden; min-height: 0; }
+.engine.is-open .engine__more { grid-template-rows: 1fr; opacity: 1; }
+.engine.is-open .ask1__go { display: none; }
+.engine:not(.is-open) .atlas { display: none; }
+
+@media (min-width: 64rem) {
+  .engine.is-open .engine__more {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-rows: 1fr;
+    gap: var(--space-24);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .engine__more { transition: none; }
+}
+
+/* --- The rule marker on the share track --------------------- */
+.rulemark {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-300);
+}
+.rulemark__line { color: var(--color-brand-pink-glow); }
+
+/* Past the line, the headline number turns amber. The tool bends
+   without quietly abandoning the rule Jake is endorsed for. */
+.engine.is-over-rule .result__price,
+.engine.is-over-rule [data-out="share-pct"] { color: var(--color-accent-warm); }
+.engine.is-over-rule .result__headline { border-color: rgba(255, 158, 94, 0.4); }
+
+/* --- Atlas: map left, ladder right -------------------------- */
+.atlas__split { display: grid; gap: var(--space-8); align-items: start; }
+@media (min-width: 64rem) {
+  .atlas__split { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: var(--space-12); }
+  .atlas__map { position: sticky; top: var(--space-8); }
+}
+.atlas__map canvas { height: clamp(18rem, 30vw, 24rem); }
+
+.prow { cursor: default; transition: background-color var(--duration-fast) var(--ease-out-expo); }
+.prow.is-hot { background: rgba(224, 19, 132, 0.07); }

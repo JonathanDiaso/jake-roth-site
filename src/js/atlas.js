@@ -1,125 +1,282 @@
 /* ============================================================
-   THE ATLAS  ·  a real map, not a decoration
-   Every area, the peak, downtown and the four installations are drawn
-   at their TRUE latitude and longitude. Distances on screen are real
-   distances. That honesty is the whole point — a Colorado Springs
-   buyer can check it against what they already know, and a PCS buyer
-   can see how far a neighbourhood actually sits from their base.
+   THE ATLAS  ·  drawn relief of the Pikes Peak region
+   Every area sits at its true latitude and longitude, so distances on
+   screen are real distances. A local can check it against what they
+   already know; a PCS buyer can see how far an area sits from base.
 
-   Deliberately NOT stock photography: captioning a downloaded image
+   What is NOT here: stock photography. Captioning a downloaded image
    "Briargate" when it is not Briargate is misrepresentation, and
    neighbourhood imagery is Fair Housing territory (04_COMPLIANCE §3).
+   Instead each area carries a glyph drawn from something factually
+   true about it — a Victorian gable for Old Colorado City's 1890s
+   stock, pines for Monument, a golf flag for Flying Horse.
 
-   Canvas 2D, no library, no tiles, no network.
+   Canvas 2D. No library, no tiles, no network.
    ============================================================ */
 
 import { PLACES, LANDMARKS } from './content.js';
 
-const PAD = 0.055;   // fraction of the frame kept clear at the edges
+const PINK = '#FF4FA8';
+const PINK_DEEP = 'rgba(224,19,132,';
+const ROCK = 'rgba(177,97,63,';
+const DIM = 'rgba(255,255,255,0.2)';
+
+/* ---- Glyphs · 1 unit ≈ 1px at scale 1, drawn around (0,0) ---- */
+const GLYPHS = {
+  /* Attached rooflines — Westside condos */
+  row(c) {
+    c.beginPath();
+    for (let i = -1; i <= 1; i++) {
+      c.moveTo(i * 5 - 2.2, 2); c.lineTo(i * 5, -1.4); c.lineTo(i * 5 + 2.2, 2);
+    }
+    c.stroke();
+  },
+  /* Street grid — Southeast Springs */
+  grid(c) {
+    c.beginPath();
+    c.moveTo(-4, -2); c.lineTo(4, -2); c.moveTo(-4, 2); c.lineTo(4, 2);
+    c.moveTo(-1.5, -4); c.lineTo(-1.5, 4); c.moveTo(1.5, -4); c.lineTo(1.5, 4);
+    c.stroke();
+  },
+  /* Open water — Security-Widefield, Big Johnson Reservoir */
+  water(c) {
+    c.beginPath();
+    for (let r = -2; r <= 2; r += 2) {
+      c.moveTo(-5, r);
+      c.bezierCurveTo(-2.5, r - 1.6, 2.5, r + 1.6, 5, r);
+    }
+    c.stroke();
+  },
+  /* Creek chevrons — Fountain, on Fountain Creek */
+  creek(c) {
+    c.beginPath();
+    c.moveTo(-4, -3); c.lineTo(0, 0); c.lineTo(-4, 3);
+    c.moveTo(1, -3); c.lineTo(5, 0); c.lineTo(1, 3);
+    c.stroke();
+  },
+  /* Victorian gable with finial — Old Colorado City, 1890s–1930s */
+  gable(c) {
+    c.beginPath();
+    c.moveTo(-4.5, 3.5); c.lineTo(-4.5, -0.5); c.lineTo(0, -4);
+    c.lineTo(4.5, -0.5); c.lineTo(4.5, 3.5);
+    c.moveTo(0, -4); c.lineTo(0, -6.2);
+    c.stroke();
+  },
+  /* Large parcel — Falcon, many lots over 0.3 acre */
+  parcel(c) {
+    c.beginPath();
+    c.rect(-4.5, -3.2, 9, 6.4);
+    c.moveTo(-4.5, 0); c.lineTo(4.5, 0);
+    c.stroke();
+  },
+  /* Foothill — Rockrimmon, sloped lots against the range */
+  hill(c) {
+    c.beginPath();
+    c.moveTo(-5.5, 3.5); c.lineTo(-1.5, -2.5); c.lineTo(1, 1);
+    c.lineTo(3, -1.5); c.lineTo(5.5, 3.5);
+    c.stroke();
+  },
+  /* Rooftop cluster — Briargate, dense 1988–2004 build-out */
+  cluster(c) {
+    c.beginPath();
+    c.moveTo(-5, 3); c.lineTo(-5, 0); c.lineTo(-2.5, -2); c.lineTo(0, 0); c.lineTo(0, 3);
+    c.moveTo(0.6, 3); c.lineTo(0.6, -0.5); c.lineTo(3, -2.4); c.lineTo(5.4, -0.5); c.lineTo(5.4, 3);
+    c.stroke();
+  },
+  /* Trail — Cordera, internal trail network on Cottonwood Creek */
+  trail(c) {
+    c.beginPath();
+    c.moveTo(-5, 3.5);
+    c.bezierCurveTo(-1, 2, -3, -2, 1, -3);
+    c.bezierCurveTo(3.5, -3.6, 4.5, -1, 5, 1);
+    c.stroke();
+  },
+  /* Pines — Monument, at the Pike National Forest edge */
+  pines(c) {
+    c.beginPath();
+    [-3.4, 0.2, 3.6].forEach((x, i) => {
+      const s = i === 1 ? 1.25 : 1;
+      c.moveTo(x - 2.4 * s, 3); c.lineTo(x, -3.6 * s); c.lineTo(x + 2.4 * s, 3);
+    });
+    c.stroke();
+  },
+  /* Flag — Flying Horse, golf course community */
+  flag(c) {
+    c.beginPath();
+    c.moveTo(-1.5, 4); c.lineTo(-1.5, -4.5);
+    c.lineTo(3.8, -3); c.lineTo(-1.5, -1.4);
+    c.stroke();
+  },
+  /* Peak-side crest — Broadmoor, against Cheyenne Mountain */
+  crest(c) {
+    c.beginPath();
+    c.moveTo(-5.5, 3.5); c.lineTo(-0.5, -4); c.lineTo(5.5, 3.5);
+    c.moveTo(-2.6, -0.2); c.lineTo(-0.5, -1.4); c.lineTo(1.6, -0.2);
+    c.stroke();
+  },
+};
+
+const GLYPH_FOR = {
+  'Westside condos': 'row',
+  'Southeast Springs': 'grid',
+  'Security-Widefield': 'water',
+  Fountain: 'creek',
+  'Old Colorado City': 'gable',
+  Falcon: 'parcel',
+  Rockrimmon: 'hill',
+  Briargate: 'cluster',
+  Cordera: 'trail',
+  Monument: 'pines',
+  'Flying Horse': 'flag',
+  Broadmoor: 'crest',
+};
 
 export function initAtlas(canvas, opts = {}) {
   const ctx = canvas.getContext('2d');
-  if (!ctx) return { destroy() {}, setReach() {} };
+  if (!ctx) return { destroy() {}, setReach() {}, setHover() {} };
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const pts = [...PLACES, ...LANDMARKS];
-  const lats = pts.map((p) => p.lat);
-  const lngs = pts.map((p) => p.lng);
-  const bounds = {
-    n: Math.max(...lats), s: Math.min(...lats),
-    e: Math.max(...lngs), w: Math.min(...lngs),
+  const all = [...PLACES, ...LANDMARKS];
+  const b = {
+    n: Math.max(...all.map((p) => p.lat)), s: Math.min(...all.map((p) => p.lat)),
+    e: Math.max(...all.map((p) => p.lng)), w: Math.min(...all.map((p) => p.lng)),
   };
 
-  let w = 0, h = 0, dpr = 1, raf = 0;
-  let reach = Infinity;          // current max affordable price
-  let phase = 0;                 // ambient pulse
+  let w = 0, h = 0, dpr = 1, raf = 0, phase = 0;
+  let reach = Infinity;
   let hovered = null;
 
-  /* Mercator is overkill at this scale — at ~0.5° of latitude the
-     distortion is under a pixel. A linear projection with a cosine
-     correction on longitude is accurate here and far cheaper. */
+  /* Linear projection with a cosine correction on longitude. At half a
+     degree of latitude, Mercator's distortion here is sub-pixel. */
   function project(lat, lng) {
-    const midLat = (bounds.n + bounds.s) / 2;
-    const kx = Math.cos((midLat * Math.PI) / 180);
-    const x0 = (bounds.w - 0.02) * kx, x1 = (bounds.e + 0.02) * kx;
-    const y0 = bounds.n + 0.02, y1 = bounds.s - 0.02;
-    const fx = ((lng * kx) - x0) / (x1 - x0);
-    const fy = (y0 - lat) / (y0 - y1);
+    const k = Math.cos(((b.n + b.s) / 2 * Math.PI) / 180);
+    const x0 = (b.w - 0.035) * k, x1 = (b.e + 0.02) * k;
+    const y0 = b.n + 0.03, y1 = b.s - 0.03;
     return {
-      x: (PAD + fx * (1 - PAD * 2)) * w,
-      y: (PAD + fy * (1 - PAD * 2)) * h,
+      x: (0.06 + ((lng * k - x0) / (x1 - x0)) * 0.88) * w,
+      y: (0.07 + ((y0 - lat) / (y0 - y1)) * 0.86) * h,
     };
   }
 
-  function resize() {
+  /* Self-healing size. This canvas is created inside a display:none
+     subtree (the engine's progressive disclosure), so its first
+     measurement is zero. Observers proved unreliable across that
+     particular visibility change, so instead every draw path re-checks
+     its own box and re-allocates the backing store when it has moved.
+     Returns true when the store changed. Never calls draw() itself, so
+     it can be used safely from inside draw paths. */
+  function syncSize() {
     const r = canvas.getBoundingClientRect();
+    const nw = Math.max(1, Math.round(r.width));
+    const nh = Math.max(1, Math.round(r.height));
+    if (nw === w && nh === h) return false;
+    w = nw; h = nh;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = Math.max(1, Math.round(r.width));
-    h = Math.max(1, Math.round(r.height));
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw();
+    return true;
   }
 
-  function drawGraticule() {
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
-    ctx.lineWidth = 1;
-    for (let i = 1; i < 7; i++) {
-      const x = (i / 7) * w, y = (i / 7) * h;
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
-    ctx.restore();
-  }
+  function resize() { syncSize(); draw(); }
 
-  /* The Front Range runs north-south down the west edge of the city.
-     Drawn from the real ridge longitude so the map reads as this place
-     and not as a generic scatter plot. */
-  function drawRange() {
-    ctx.save();
+  /* --- The Front Range, drawn as relief with Pikes Peak named --- */
+  function drawRelief() {
+    const peak = project(38.8405, -105.0442);
+    const baseY = h * 0.94;
+
+    /* Back ridge — the range continuing north and south of the summit. */
     ctx.beginPath();
-    for (let i = 0; i <= 40; i++) {
-      const lat = bounds.n + 0.04 - (i / 40) * (bounds.n - bounds.s + 0.08);
-      const wobble = Math.sin(i * 0.55) * 0.012 + Math.sin(i * 1.7) * 0.005;
-      const p = project(lat, -104.98 + wobble);
-      i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
-    }
-    ctx.strokeStyle = 'rgba(177,97,63,0.5)';   // --color-rock
-    ctx.lineWidth = 1.5;
+    ctx.moveTo(-10, baseY);
+    const ridge = [
+      [-10, h * 0.30], [w * 0.045, h * 0.20], [w * 0.085, h * 0.34],
+      [w * 0.12, h * 0.25], [w * 0.155, h * 0.40], [w * 0.185, h * 0.33],
+      [w * 0.21, h * 0.48],
+    ];
+    ridge.forEach(([x, y]) => ctx.lineTo(x, y));
+    ctx.lineTo(w * 0.21, baseY);
+    ctx.closePath();
+    ctx.fillStyle = ROCK + '0.10)';
+    ctx.fill();
+    ctx.strokeStyle = ROCK + '0.34)';
+    ctx.lineWidth = 1;
     ctx.stroke();
-    ctx.lineTo(0, h); ctx.lineTo(0, 0); ctx.closePath();
-    ctx.fillStyle = 'rgba(177,97,63,0.07)';
+
+    /* Pikes Peak itself — a real summit, front-most, with a snow cap. */
+    const pw = w * 0.085;
+    const ph = h * 0.34;
+    const apex = { x: peak.x, y: peak.y - ph * 0.42 };
+
+    ctx.beginPath();
+    ctx.moveTo(apex.x - pw, baseY);
+    ctx.lineTo(apex.x - pw * 0.42, apex.y + ph * 0.42);
+    ctx.lineTo(apex.x - pw * 0.16, apex.y + ph * 0.10);
+    ctx.lineTo(apex.x, apex.y);
+    ctx.lineTo(apex.x + pw * 0.22, apex.y + ph * 0.16);
+    ctx.lineTo(apex.x + pw * 0.55, apex.y + ph * 0.38);
+    ctx.lineTo(apex.x + pw, baseY);
+    ctx.closePath();
+    const g = ctx.createLinearGradient(apex.x, apex.y, apex.x, baseY);
+    g.addColorStop(0, ROCK + '0.32)');
+    g.addColorStop(1, ROCK + '0.05)');
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = ROCK + '0.6)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    /* Snow cap. Clipped to the summit silhouette so it can never spill
+       outside the mountain, with a ragged lower edge — a straight line
+       across the top would read as a triangle with a hat on it. */
+    ctx.save();
+    ctx.clip();
+    ctx.beginPath();
+    ctx.moveTo(apex.x - pw * 0.5, apex.y + ph * 0.40);
+    ctx.lineTo(apex.x - pw * 0.34, apex.y + ph * 0.22);
+    ctx.lineTo(apex.x - pw * 0.20, apex.y + ph * 0.30);
+    ctx.lineTo(apex.x - pw * 0.06, apex.y + ph * 0.09);
+    ctx.lineTo(apex.x + pw * 0.06, apex.y + ph * 0.22);
+    ctx.lineTo(apex.x + pw * 0.20, apex.y + ph * 0.14);
+    ctx.lineTo(apex.x + pw * 0.34, apex.y + ph * 0.34);
+    ctx.lineTo(apex.x + pw * 0.6, apex.y + ph * 0.46);
+    ctx.lineTo(apex.x + pw, apex.y - 4);
+    ctx.lineTo(apex.x - pw, apex.y - 4);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(255,255,255,0.88)';
     ctx.fill();
     ctx.restore();
+
+    ctx.font = '600 9px "Inter Tight", system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.textAlign = 'center';
+    ctx.fillText('PIKES PEAK', apex.x, baseY - h * 0.03);
+    ctx.font = '400 8px "Inter Tight", system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.28)';
+    ctx.fillText('14,115 FT', apex.x, baseY - h * 0.03 + 11);
   }
 
   function drawLandmarks() {
     ctx.save();
-    LANDMARKS.forEach((l) => {
+    ctx.font = '500 9px "Inter Tight", system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    LANDMARKS.filter((l) => l.kind !== 'peak').forEach((l) => {
       const p = project(l.lat, l.lng);
       ctx.beginPath();
-      if (l.kind === 'peak') {
-        ctx.moveTo(p.x, p.y - 7); ctx.lineTo(p.x + 6, p.y + 4);
-        ctx.lineTo(p.x - 6, p.y + 4); ctx.closePath();
-        ctx.fillStyle = 'rgba(255,158,94,0.85)';
+      if (l.kind === 'city') {
+        ctx.rect(p.x - 3.5, p.y - 3.5, 7, 7);
+        ctx.fillStyle = 'rgba(255,255,255,0.34)';
         ctx.fill();
       } else {
-        ctx.rect(p.x - 3, p.y - 3, 6, 6);
-        ctx.strokeStyle = l.kind === 'base' ? 'rgba(127,212,255,0.7)' : 'rgba(255,255,255,0.5)';
-        ctx.lineWidth = 1.2;
+        /* Installations: a warm chevron rather than a blue square. */
+        ctx.moveTo(p.x, p.y - 4.5); ctx.lineTo(p.x + 4, p.y + 3);
+        ctx.lineTo(p.x - 4, p.y + 3); ctx.closePath();
+        ctx.strokeStyle = 'rgba(255,158,94,0.62)';
+        ctx.lineWidth = 1.1;
         ctx.stroke();
       }
-      ctx.font = '500 10px "Inter Tight", system-ui, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.42)';
-      ctx.textAlign = 'center';
-      /* Landmarks are the background layer, so they carry a ground shadow
-         and place labels are drawn over them with their own. Without this
-         the two label sets collide into an unreadable smear. */
-      ctx.shadowColor = 'rgba(5,4,6,0.95)';
-      ctx.shadowBlur = 6;
-      ctx.fillText(l.name.toUpperCase(), p.x, p.y + 18);
+      ctx.shadowColor = 'rgba(5,4,6,0.95)'; ctx.shadowBlur = 6;
+      ctx.fillStyle = 'rgba(255,255,255,0.38)';
+      ctx.fillText(l.name.toUpperCase(), p.x, p.y + 15);
       ctx.shadowBlur = 0;
     });
     ctx.restore();
@@ -129,42 +286,41 @@ export function initAtlas(canvas, opts = {}) {
     PLACES.forEach((pl, i) => {
       const p = project(pl.lat, pl.lng);
       const inReach = pl.median <= reach;
-      const isHot = hovered === i;
+      const hot = hovered === i;
+      const pulse = inReach ? 0.5 + 0.5 * Math.sin(phase + i * 0.8) : 0;
 
-      /* In-reach markers carry a slow pink pulse. Out-of-reach ones stay
-         visible and labelled — the tool never hides what you cannot
-         afford, it just stops lighting it. */
-      const pulse = inReach ? 0.5 + 0.5 * Math.sin(phase + i * 0.7) : 0;
-      const r = isHot ? 9 : inReach ? 6 : 3.5;
-
-      if (inReach) {
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 26 + pulse * 8);
-        g.addColorStop(0, `rgba(224,19,132,${0.34 + pulse * 0.2})`);
-        g.addColorStop(1, 'rgba(224,19,132,0)');
+      if (inReach || hot) {
+        const rad = (hot ? 34 : 22) + pulse * 7;
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+        g.addColorStop(0, PINK_DEEP + (hot ? 0.5 : 0.3 + pulse * 0.16) + ')');
+        g.addColorStop(1, PINK_DEEP + '0)');
         ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 26 + pulse * 8, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p.x, p.y, rad, 0, Math.PI * 2); ctx.fill();
       }
 
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-      ctx.fillStyle = inReach ? '#FF4FA8' : 'rgba(255,255,255,0.22)';
-      ctx.fill();
+      /* The characteristic mark. Scaled up and brightened on hover so
+         the row-to-map link is unmistakable. */
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.scale(hot ? 1.5 : 1.1, hot ? 1.5 : 1.1);
+      ctx.lineWidth = hot ? 1.5 : 1.2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = hot ? '#FFFFFF' : inReach ? PINK : DIM;
+      (GLYPHS[GLYPH_FOR[pl.name]] || GLYPHS.cluster)(ctx);
+      ctx.restore();
 
-      if (inReach || isHot) {
+      if (inReach || hot) {
         ctx.save();
-        ctx.font = `${isHot ? 600 : 500} 11px "Inter Tight", system-ui, sans-serif`;
-        ctx.textAlign = 'left';
-        /* Sit the label above the marker rather than beside it: landmark
-           captions already occupy the space below, and alternating the
-           vertical offset keeps neighbouring areas from stacking. */
-        const ty = p.y - r - 7 - (i % 2) * 11;
-        ctx.shadowColor = 'rgba(5,4,6,0.98)';
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = 'rgba(5,4,6,0.9)';
-        ctx.fillText(pl.name, p.x - r - 1, ty);   // shadow pass
+        ctx.font = `${hot ? 600 : 500} 10px "Inter Tight", system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        const ty = p.y - 12 - (i % 2) * 10;
+        ctx.shadowColor = 'rgba(5,4,6,0.98)'; ctx.shadowBlur = 8;
+        ctx.fillStyle = 'rgba(5,4,6,0.95)';
+        ctx.fillText(pl.name, p.x, ty);
         ctx.shadowBlur = 0;
-        ctx.fillStyle = isHot ? '#FFFFFF' : '#FF4FA8';
-        ctx.fillText(pl.name, p.x - r - 1, ty);
+        ctx.fillStyle = hot ? '#FFFFFF' : PINK;
+        ctx.fillText(pl.name, p.x, ty);
         ctx.restore();
       }
     });
@@ -172,40 +328,46 @@ export function initAtlas(canvas, opts = {}) {
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    drawGraticule();
-    drawRange();
+    drawRelief();
     drawLandmarks();
     drawPlaces();
   }
 
-  function loop() {
-    phase += 0.02;
-    draw();
-    raf = requestAnimationFrame(loop);
+  /* Visibility is checked INSIDE the loop rather than gating it from an
+     IntersectionObserver. The observer fires "not intersecting" while the
+     canvas is still inside the engine's display:none subtree and then
+     does not reliably fire again on reveal, which left the loop dead and
+     the backing store stuck at 1px. A rect test per frame is a rounding
+     error next to the drawing itself and cannot get stuck. */
+  function onScreen() {
+    const r = canvas.getBoundingClientRect();
+    return r.width > 1 && r.bottom > -200 && r.top < window.innerHeight + 200;
   }
 
-  let visible = false;
-  const io = new IntersectionObserver(([e]) => {
-    visible = e.isIntersecting;
-    if (visible && !reduced.matches && !raf) raf = requestAnimationFrame(loop);
-    if (!visible && raf) { cancelAnimationFrame(raf); raf = 0; }
-  }, { threshold: 0 });
-  io.observe(canvas);
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    if (!onScreen()) return;
+    syncSize();
+    phase += 0.02;
+    draw();
+  }
+
+  if (!reduced.matches) raf = requestAnimationFrame(loop);
 
   canvas.addEventListener('pointermove', (e) => {
     const r = canvas.getBoundingClientRect();
     const mx = e.clientX - r.left, my = e.clientY - r.top;
-    let best = null, bestD = 22;
+    let best = null, bd = 24;
     PLACES.forEach((pl, i) => {
       const p = project(pl.lat, pl.lng);
       const d = Math.hypot(p.x - mx, p.y - my);
-      if (d < bestD) { bestD = d; best = i; }
+      if (d < bd) { bd = d; best = i; }
     });
     if (best !== hovered) {
       hovered = best;
       canvas.style.cursor = best === null ? '' : 'pointer';
+      opts.onHover?.(best);
       if (reduced.matches || !raf) draw();
-      opts.onHover?.(best === null ? null : PLACES[best]);
     }
   });
   canvas.addEventListener('pointerleave', () => {
@@ -220,10 +382,15 @@ export function initAtlas(canvas, opts = {}) {
   resize();
 
   return {
-    setReach(v) { reach = v; if (reduced.matches || !raf) draw(); },
+    /* resize() is exposed because this canvas is built inside a hidden
+       subtree and nothing about becoming visible is reliably observable
+       from in here. The owner knows when it revealed the panel, so the
+       owner tells us. Cheap, deterministic, no observer to get stuck. */
+    resize,
+    setReach(v) { reach = v; resize(); },
+    setHover(i) { hovered = i; resize(); },
     destroy() {
       if (raf) cancelAnimationFrame(raf);
-      io.disconnect();
       window.removeEventListener('resize', onResize);
     },
   };
